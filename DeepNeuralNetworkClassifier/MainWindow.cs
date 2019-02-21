@@ -449,7 +449,7 @@ public partial class MainWindow : Gtk.Window
 
         UpdateParameters(ViewTrainingData, Examples, InputLayerNodes, true);
 
-        //HiddenLayerNodes.Value = 2 * InputLayerNodes.Value;
+        HiddenLayerNodes.Value = 2 * InputLayerNodes.Value;
     }
 
     protected void OnReloadTrainingDataButtonClicked(object sender, EventArgs e)
@@ -459,7 +459,7 @@ public partial class MainWindow : Gtk.Window
 
         UpdateParameters(ViewTrainingData, Examples, InputLayerNodes, true);
 
-        //HiddenLayerNodes.Value = 2 * InputLayerNodes.Value
+        HiddenLayerNodes.Value = 2 * InputLayerNodes.Value;
     }
 
     protected void OnOpenTestDataButtonClicked(object sender, EventArgs e)
@@ -474,6 +474,57 @@ public partial class MainWindow : Gtk.Window
     }
 
     protected void OnMainNotebookSwitchPage(object o, SwitchPageArgs args)
+    {
+        switch (args.PageNum)
+        {
+            case (int)Pages.DATA:
+
+                ReparentTextView(LayoutPageData, WindowTestData, 30, 270);
+                ReparentLabel(LayoutPageData, LabelTestData, 30, 220);
+
+                break;
+
+            case (int)Pages.TRAINING:
+
+                ReparentTextView(LayoutPageTraining, WindowTestData, 30, 310);
+                ReparentLabel(LayoutPageTraining, LabelTestData, 30, 290);
+
+                break;
+
+            default:
+
+                ReparentTextView(LayoutPageData, WindowTestData, 30, 270);
+                ReparentLabel(LayoutPageData, LabelTestData, 30, 220);
+
+                break;
+        }
+    }
+
+    protected void OnStartButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnStopButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnResetButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnClassifyButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnLoadNetworkButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnOpenNetworkButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnSaveNetworkButtonClicked(object sender, EventArgs e)
     {
     }
 }
