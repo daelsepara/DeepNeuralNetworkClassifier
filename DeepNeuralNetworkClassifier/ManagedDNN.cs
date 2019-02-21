@@ -8,8 +8,8 @@ namespace DeepLearnCS
         public List<ManagedArray> Weights = new List<ManagedArray>();
         public List<ManagedArray> Deltas = new List<ManagedArray>();
 
-        public ManagedArray Yk;
-        public ManagedArray Y_output;
+        public ManagedArray Y;
+        public ManagedArray Y_true;
 
         // intermediate results
         public List<ManagedArray> X = new List<ManagedArray>();
@@ -50,7 +50,9 @@ namespace DeepLearnCS
                 }
                 else
                 {
-                    Yk = ManagedMatrix.Sigm(ZZ);
+                    ManagedOps.Free(Y);
+
+                    Y = ManagedMatrix.Sigm(ZZ);
                 }
 
                 ManagedOps.Free(tW);
@@ -74,13 +76,13 @@ namespace DeepLearnCS
 
             var last = Weights.Count - 1;
 
-            D.Add(ManagedMatrix.Diff(Yk, Y_output));
+            D.Add(ManagedMatrix.Diff(Y, Y_true));
 
             for (var layer = last - 1; layer >= 0; layer--)
             {
                 var current = D.Count;
                 var prev = D.Count - 1;
-                
+
                 var W = new ManagedArray(Weights[layer + 1].x - 1, Weights[layer + 1].y);
                 var DZ = ManagedMatrix.DSigm(Z[layer]);
 
@@ -108,10 +110,10 @@ namespace DeepLearnCS
             Cost = 0.0;
             L2 = 0.0;
 
-            for (var i = 0; i < Y_output.Length(); i++)
+            for (var i = 0; i < Y_true.Length(); i++)
             {
                 L2 += 0.5 * (D[last][i] * D[last][i]);
-                Cost += (-Y_output[i] * Math.Log(Yk[i]) - (1 - Y_output[i]) * Math.Log(1 - Yk[i]));
+                Cost += (-Y_true[i] * Math.Log(Y[i]) - (1 - Y_true[i]) * Math.Log(1 - Y[i]));
             }
 
             Cost /= input.y;
@@ -126,8 +128,17 @@ namespace DeepLearnCS
             D.Clear();
             X.Clear();
             Z.Clear();
+        }
 
-            ManagedOps.Free(Yk);
+        public void ClearDeltas()
+        {
+            for (var layer = 0; layer < Weights.Count; layer++)
+            {
+                // cleanup of arrays allocated in BackPropagation
+                ManagedOps.Free(Deltas[layer]);
+            }
+
+            Deltas.Clear();
         }
 
         public void ApplyGradients(NeuralNetworkOptions opts)
@@ -135,12 +146,7 @@ namespace DeepLearnCS
             for (var layer = 0; layer < Weights.Count; layer++)
             {
                 ManagedMatrix.Add(Weights[layer], Deltas[layer], -opts.Alpha);
-
-                // cleanup of arrays allocated in BackPropagation
-                ManagedOps.Free(Deltas[layer]);
             }
-
-            Deltas.Clear();
         }
 
         public void Rand(ManagedArray rand, Random random)
@@ -190,7 +196,7 @@ namespace DeepLearnCS
 
                     for (var x = 0; x < opts.Categories; x++)
                     {
-                        double val = Yk[x, y];
+                        double val = Y[x, y];
 
                         if (val > maxval)
                         {
@@ -202,12 +208,12 @@ namespace DeepLearnCS
                 }
                 else
                 {
-                    prediction[y] = Yk[y];
+                    prediction[y] = Y[y];
                 }
             }
 
-            // cleanup of arrays allocated in Forward
-            ManagedOps.Free(Yk);
+            // cleanup of arrays allocated in Forward propagation
+            ManagedOps.Free(Y);
 
             // Cleanup
             for (var layer = 0; layer < Weights.Count; layer++)
@@ -236,7 +242,7 @@ namespace DeepLearnCS
 
                     for (var x = 0; x < opts.Categories; x++)
                     {
-                        var val = Yk[x, y];
+                        var val = Y[x, y];
 
                         if (val > maxval)
                         {
@@ -249,12 +255,12 @@ namespace DeepLearnCS
                 }
                 else
                 {
-                    classification[y] = Yk[y] > threshold ? 1 : 0;
+                    classification[y] = Y[y] > threshold ? 1 : 0;
                 }
             }
 
-            // cleanup of arrays allocated in Forward
-            ManagedOps.Free(Yk);
+            // cleanup of arrays allocated in Forward propagation
+            ManagedOps.Free(Y);
 
             for (var layer = 0; layer < Weights.Count; layer++)
             {
@@ -269,14 +275,14 @@ namespace DeepLearnCS
 
         public void SetupLabels(ManagedArray output, NeuralNetworkOptions opts)
         {
-            Y_output = Labels(output, opts);
+            Y_true = Labels(output, opts);
         }
 
         public void Setup(ManagedArray output, NeuralNetworkOptions opts, bool Reset = true)
         {
             if (Reset)
             {
-                if (Weights != null && Weights.Count > 0)
+                if (Weights.Count > 0)
                 {
                     for (var layer = 0; layer < Weights.Count; layer++)
                     {
@@ -321,11 +327,20 @@ namespace DeepLearnCS
         {
             Forward(input);
             BackPropagation(input);
-            ApplyGradients(opts);
+
+            var optimized = (double.IsNaN(Cost) || Cost < opts.Tolerance);
+
+            // Apply gradients only if the error is still high
+            if (!optimized)
+            {
+                ApplyGradients(opts);
+            }
+
+            ClearDeltas();
 
             Iterations = Iterations + 1;
 
-            return (double.IsNaN(Cost) || Iterations >= opts.Epochs || Cost < opts.Tolerance);
+            return (optimized || Iterations >= opts.Epochs);
         }
 
         public void Train(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
@@ -337,8 +352,8 @@ namespace DeepLearnCS
 
         public void Free()
         {
-            ManagedOps.Free(Yk);
-            ManagedOps.Free(Y_output);
+            ManagedOps.Free(Y);
+            ManagedOps.Free(Y_true);
 
             for (var layer = 0; layer < Weights.Count; layer++)
             {
