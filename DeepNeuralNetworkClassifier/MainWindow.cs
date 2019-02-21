@@ -86,12 +86,12 @@ public partial class MainWindow : Gtk.Window
         Confirm.WindowStateEvent += OnWindowStateEvent;
 
         TextLoader = new FileChooserDialog(
-    "Load Text File",
-    this,
-    FileChooserAction.Open,
-    "Cancel", ResponseType.Cancel,
-    "Load", ResponseType.Accept
-);
+            "Load Text File",
+            this,
+            FileChooserAction.Open,
+            "Cancel", ResponseType.Cancel,
+            "Load", ResponseType.Accept
+        );
 
         JsonLoader = new FileChooserDialog(
             "Load trained models",
@@ -139,7 +139,27 @@ public partial class MainWindow : Gtk.Window
         ImageSaver.AddFilter(AddFilter("ico", "*.ico"));
         ImageSaver.Filter = ImageSaver.Filters[0];
 
+        UpdateDelimiterBox(DelimiterBox, Delimiters);
+
         Idle.Add(new IdleHandler(OnIdle));
+    }
+
+    protected void UpdateDelimiterBox(ComboBox combo, List<Delimiter> delimeters)
+    {
+        combo.Clear();
+
+        var cell = new CellRendererText();
+        combo.PackStart(cell, false);
+        combo.AddAttribute(cell, "text", 0);
+        var store = new ListStore(typeof(string));
+        combo.Model = store;
+
+        foreach (var delimeter in delimeters)
+        {
+            store.AppendValues(delimeter.Name);
+        }
+
+        combo.Active = delimeters.Count > 0 ? 0 : -1;
     }
 
     protected void ReparentTextView(Fixed parent, ScrolledWindow window, int x, int y)
@@ -249,5 +269,21 @@ public partial class MainWindow : Gtk.Window
         Processing.ReleaseMutex();
 
         return true;
+    }
+
+    protected void OnOpenTrainingDataButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnReloadTrainingDataButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnOpenTestDataButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnReloadTestDataButtonClicked(object sender, EventArgs e)
+    {
     }
 }

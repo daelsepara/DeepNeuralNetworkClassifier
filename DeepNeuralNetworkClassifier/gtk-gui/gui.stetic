@@ -11,7 +11,7 @@
       <action id="AboutButton">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes" />
-        <property name="StockId">gtk-help</property>
+        <property name="StockId">gtk-dialog-info</property>
         <property name="Tooltip" translatable="yes">About Deep Neural Network Classifier</property>
         <signal name="Activated" handler="OnAboutButtonClicked" />
       </action>
@@ -37,22 +37,6 @@
         <property name="MemberName" />
         <property name="HasWindow">False</property>
         <child>
-          <widget class="Gtk.Toolbar" id="MainToolbar">
-            <property name="MemberName" />
-            <property name="ShowArrow">False</property>
-            <property name="ButtonStyle">Icons</property>
-            <property name="IconSize">Button</property>
-            <node name="MainToolbar" type="Toolbar">
-              <node type="Toolitem" action="AboutButton" />
-              <node type="Toolitem" action="QuitButton" />
-            </node>
-          </widget>
-          <packing>
-            <property name="X">30</property>
-            <property name="Y">20</property>
-          </packing>
-        </child>
-        <child>
           <widget class="Gtk.Notebook" id="MainNotebook">
             <property name="MemberName" />
             <property name="WidthRequest">740</property>
@@ -63,6 +47,179 @@
               <widget class="Gtk.Fixed" id="LayoutPageData">
                 <property name="MemberName" />
                 <property name="HasWindow">False</property>
+                <child>
+                  <widget class="Gtk.Label" id="LabelTrainingData">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Training Data&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">30</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="FilenameTrainingData">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="IsEditable">True</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">30</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="WindowTrainingData">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="HeightRequest">140</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="ViewTrainingData">
+                        <property name="MemberName" />
+                        <property name="WidthRequest">0</property>
+                        <property name="HeightRequest">0</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="CursorVisible">False</property>
+                        <property name="AcceptsTab">False</property>
+                        <property name="Text" translatable="yes" />
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">30</property>
+                    <property name="Y">70</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelTestData">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Test Data&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">30</property>
+                    <property name="Y">220</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="FilenameTestData">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="IsEditable">True</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">30</property>
+                    <property name="Y">240</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="WindowTestData">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">400</property>
+                    <property name="HeightRequest">140</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="ViewTestData">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="AcceptsTab">False</property>
+                        <property name="Text" translatable="yes" />
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">30</property>
+                    <property name="Y">270</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="OpenTrainingDataButton">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-open Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnOpenTrainingDataButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">440</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="ReloadTrainingDataButton">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-refresh Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnReloadTrainingDataButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">470</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="OpenTestDataButton">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-open Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnOpenTestDataButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">440</property>
+                    <property name="Y">240</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="ReloadTestDataButton">
+                    <property name="MemberName" />
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-refresh Menu</property>
+                    <property name="Label" translatable="yes" />
+                    <property name="FocusOnClick">False</property>
+                    <signal name="Clicked" handler="OnReloadTestDataButtonClicked" />
+                  </widget>
+                  <packing>
+                    <property name="X">470</property>
+                    <property name="Y">240</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelDelimiters">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Delimiters&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">20</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ComboBox" id="DelimiterBox">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">150</property>
+                    <property name="IsTextCombo">True</property>
+                    <property name="Items" translatable="yes" />
+                  </widget>
+                  <packing>
+                    <property name="X">520</property>
+                    <property name="Y">40</property>
+                  </packing>
+                </child>
               </widget>
             </child>
             <child>
@@ -150,6 +307,21 @@
           <packing>
             <property name="X">30</property>
             <property name="Y">70</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Toolbar" id="MainToolbar">
+            <property name="MemberName" />
+            <property name="ShowArrow">False</property>
+            <property name="ButtonStyle">Icons</property>
+            <node name="MainToolbar" type="Toolbar">
+              <node type="Toolitem" action="AboutButton" />
+              <node type="Toolitem" action="QuitButton" />
+            </node>
+          </widget>
+          <packing>
+            <property name="X">30</property>
+            <property name="Y">20</property>
           </packing>
         </child>
       </widget>

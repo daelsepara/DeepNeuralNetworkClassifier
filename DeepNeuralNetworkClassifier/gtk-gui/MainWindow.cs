@@ -11,11 +11,37 @@ public partial class MainWindow
 
 	private global::Gtk.Fixed MainLayout;
 
-	private global::Gtk.Toolbar MainToolbar;
-
 	private global::Gtk.Notebook MainNotebook;
 
 	private global::Gtk.Fixed LayoutPageData;
+
+	private global::Gtk.Label LabelTrainingData;
+
+	private global::Gtk.Entry FilenameTrainingData;
+
+	private global::Gtk.ScrolledWindow WindowTrainingData;
+
+	private global::Gtk.TextView ViewTrainingData;
+
+	private global::Gtk.Label LabelTestData;
+
+	private global::Gtk.Entry FilenameTestData;
+
+	private global::Gtk.ScrolledWindow WindowTestData;
+
+	private global::Gtk.TextView ViewTestData;
+
+	private global::Gtk.Button OpenTrainingDataButton;
+
+	private global::Gtk.Button ReloadTrainingDataButton;
+
+	private global::Gtk.Button OpenTestDataButton;
+
+	private global::Gtk.Button ReloadTestDataButton;
+
+	private global::Gtk.Label LabelDelimiters;
+
+	private global::Gtk.ComboBox DelimiterBox;
 
 	private global::Gtk.Label LabelPageData;
 
@@ -35,13 +61,15 @@ public partial class MainWindow
 
 	private global::Gtk.Label LabelPageAbout;
 
+	private global::Gtk.Toolbar MainToolbar;
+
 	protected virtual void Build()
 	{
 		global::Stetic.Gui.Initialize(this);
 		// Widget MainWindow
 		this.UIManager = new global::Gtk.UIManager();
 		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup("Default");
-		this.AboutButton = new global::Gtk.Action("AboutButton", null, global::Mono.Unix.Catalog.GetString("About Deep Neural Network Classifier"), "gtk-help");
+		this.AboutButton = new global::Gtk.Action("AboutButton", null, global::Mono.Unix.Catalog.GetString("About Deep Neural Network Classifier"), "gtk-dialog-info");
 		w1.Add(this.AboutButton, null);
 		this.QuitButton = new global::Gtk.Action("QuitButton", null, global::Mono.Unix.Catalog.GetString("Exit Deep Neural Network Classifier"), "gtk-quit");
 		w1.Add(this.QuitButton, null);
@@ -60,18 +88,6 @@ public partial class MainWindow
 		this.MainLayout.Name = "MainLayout";
 		this.MainLayout.HasWindow = false;
 		// Container child MainLayout.Gtk.Fixed+FixedChild
-		this.UIManager.AddUiFromString("<ui><toolbar name=\'MainToolbar\'><toolitem name=\'AboutButton\' action=\'AboutButton\'" +
-				"/><toolitem name=\'QuitButton\' action=\'QuitButton\'/></toolbar></ui>");
-		this.MainToolbar = ((global::Gtk.Toolbar)(this.UIManager.GetWidget("/MainToolbar")));
-		this.MainToolbar.Name = "MainToolbar";
-		this.MainToolbar.ShowArrow = false;
-		this.MainToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
-		this.MainToolbar.IconSize = ((global::Gtk.IconSize)(4));
-		this.MainLayout.Add(this.MainToolbar);
-		global::Gtk.Fixed.FixedChild w2 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainToolbar]));
-		w2.X = 30;
-		w2.Y = 20;
-		// Container child MainLayout.Gtk.Fixed+FixedChild
 		this.MainNotebook = new global::Gtk.Notebook();
 		this.MainNotebook.WidthRequest = 740;
 		this.MainNotebook.HeightRequest = 500;
@@ -82,6 +98,143 @@ public partial class MainWindow
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
 		this.LayoutPageData.HasWindow = false;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.LabelTrainingData = new global::Gtk.Label();
+		this.LabelTrainingData.Name = "LabelTrainingData";
+		this.LabelTrainingData.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Training Data</b>");
+		this.LabelTrainingData.UseMarkup = true;
+		this.LayoutPageData.Add(this.LabelTrainingData);
+		global::Gtk.Fixed.FixedChild w2 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.LabelTrainingData]));
+		w2.X = 30;
+		w2.Y = 20;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.FilenameTrainingData = new global::Gtk.Entry();
+		this.FilenameTrainingData.WidthRequest = 400;
+		this.FilenameTrainingData.Name = "FilenameTrainingData";
+		this.FilenameTrainingData.IsEditable = true;
+		this.FilenameTrainingData.InvisibleChar = '•';
+		this.LayoutPageData.Add(this.FilenameTrainingData);
+		global::Gtk.Fixed.FixedChild w3 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.FilenameTrainingData]));
+		w3.X = 30;
+		w3.Y = 40;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.WindowTrainingData = new global::Gtk.ScrolledWindow();
+		this.WindowTrainingData.WidthRequest = 400;
+		this.WindowTrainingData.HeightRequest = 140;
+		this.WindowTrainingData.Name = "WindowTrainingData";
+		this.WindowTrainingData.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child WindowTrainingData.Gtk.Container+ContainerChild
+		this.ViewTrainingData = new global::Gtk.TextView();
+		this.ViewTrainingData.WidthRequest = 0;
+		this.ViewTrainingData.HeightRequest = 0;
+		this.ViewTrainingData.Name = "ViewTrainingData";
+		this.ViewTrainingData.Editable = false;
+		this.ViewTrainingData.CursorVisible = false;
+		this.ViewTrainingData.AcceptsTab = false;
+		this.WindowTrainingData.Add(this.ViewTrainingData);
+		this.LayoutPageData.Add(this.WindowTrainingData);
+		global::Gtk.Fixed.FixedChild w5 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.WindowTrainingData]));
+		w5.X = 30;
+		w5.Y = 70;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.LabelTestData = new global::Gtk.Label();
+		this.LabelTestData.Name = "LabelTestData";
+		this.LabelTestData.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Test Data</b>");
+		this.LabelTestData.UseMarkup = true;
+		this.LayoutPageData.Add(this.LabelTestData);
+		global::Gtk.Fixed.FixedChild w6 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.LabelTestData]));
+		w6.X = 30;
+		w6.Y = 220;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.FilenameTestData = new global::Gtk.Entry();
+		this.FilenameTestData.WidthRequest = 400;
+		this.FilenameTestData.Name = "FilenameTestData";
+		this.FilenameTestData.IsEditable = true;
+		this.FilenameTestData.InvisibleChar = '•';
+		this.LayoutPageData.Add(this.FilenameTestData);
+		global::Gtk.Fixed.FixedChild w7 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.FilenameTestData]));
+		w7.X = 30;
+		w7.Y = 240;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.WindowTestData = new global::Gtk.ScrolledWindow();
+		this.WindowTestData.WidthRequest = 400;
+		this.WindowTestData.HeightRequest = 140;
+		this.WindowTestData.Name = "WindowTestData";
+		this.WindowTestData.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child WindowTestData.Gtk.Container+ContainerChild
+		this.ViewTestData = new global::Gtk.TextView();
+		this.ViewTestData.CanFocus = true;
+		this.ViewTestData.Name = "ViewTestData";
+		this.ViewTestData.AcceptsTab = false;
+		this.WindowTestData.Add(this.ViewTestData);
+		this.LayoutPageData.Add(this.WindowTestData);
+		global::Gtk.Fixed.FixedChild w9 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.WindowTestData]));
+		w9.X = 30;
+		w9.Y = 270;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.OpenTrainingDataButton = new global::Gtk.Button();
+		this.OpenTrainingDataButton.CanFocus = true;
+		this.OpenTrainingDataButton.Name = "OpenTrainingDataButton";
+		this.OpenTrainingDataButton.FocusOnClick = false;
+		global::Gtk.Image w10 = new global::Gtk.Image();
+		w10.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-open", global::Gtk.IconSize.Menu);
+		this.OpenTrainingDataButton.Image = w10;
+		this.LayoutPageData.Add(this.OpenTrainingDataButton);
+		global::Gtk.Fixed.FixedChild w11 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.OpenTrainingDataButton]));
+		w11.X = 440;
+		w11.Y = 40;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.ReloadTrainingDataButton = new global::Gtk.Button();
+		this.ReloadTrainingDataButton.CanFocus = true;
+		this.ReloadTrainingDataButton.Name = "ReloadTrainingDataButton";
+		this.ReloadTrainingDataButton.FocusOnClick = false;
+		global::Gtk.Image w12 = new global::Gtk.Image();
+		w12.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-refresh", global::Gtk.IconSize.Menu);
+		this.ReloadTrainingDataButton.Image = w12;
+		this.LayoutPageData.Add(this.ReloadTrainingDataButton);
+		global::Gtk.Fixed.FixedChild w13 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.ReloadTrainingDataButton]));
+		w13.X = 470;
+		w13.Y = 40;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.OpenTestDataButton = new global::Gtk.Button();
+		this.OpenTestDataButton.CanFocus = true;
+		this.OpenTestDataButton.Name = "OpenTestDataButton";
+		this.OpenTestDataButton.FocusOnClick = false;
+		global::Gtk.Image w14 = new global::Gtk.Image();
+		w14.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-open", global::Gtk.IconSize.Menu);
+		this.OpenTestDataButton.Image = w14;
+		this.LayoutPageData.Add(this.OpenTestDataButton);
+		global::Gtk.Fixed.FixedChild w15 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.OpenTestDataButton]));
+		w15.X = 440;
+		w15.Y = 240;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.ReloadTestDataButton = new global::Gtk.Button();
+		this.ReloadTestDataButton.Name = "ReloadTestDataButton";
+		this.ReloadTestDataButton.FocusOnClick = false;
+		global::Gtk.Image w16 = new global::Gtk.Image();
+		w16.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-refresh", global::Gtk.IconSize.Menu);
+		this.ReloadTestDataButton.Image = w16;
+		this.LayoutPageData.Add(this.ReloadTestDataButton);
+		global::Gtk.Fixed.FixedChild w17 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.ReloadTestDataButton]));
+		w17.X = 470;
+		w17.Y = 240;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.LabelDelimiters = new global::Gtk.Label();
+		this.LabelDelimiters.Name = "LabelDelimiters";
+		this.LabelDelimiters.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Delimiters</b>");
+		this.LabelDelimiters.UseMarkup = true;
+		this.LayoutPageData.Add(this.LabelDelimiters);
+		global::Gtk.Fixed.FixedChild w18 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.LabelDelimiters]));
+		w18.X = 520;
+		w18.Y = 20;
+		// Container child LayoutPageData.Gtk.Fixed+FixedChild
+		this.DelimiterBox = global::Gtk.ComboBox.NewText();
+		this.DelimiterBox.WidthRequest = 150;
+		this.DelimiterBox.Name = "DelimiterBox";
+		this.LayoutPageData.Add(this.DelimiterBox);
+		global::Gtk.Fixed.FixedChild w19 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageData[this.DelimiterBox]));
+		w19.X = 520;
+		w19.Y = 40;
 		this.MainNotebook.Add(this.LayoutPageData);
 		// Notebook tab
 		this.LabelPageData = new global::Gtk.Label();
@@ -94,8 +247,8 @@ public partial class MainWindow
 		this.LayoutPageTraining.Name = "LayoutPageTraining";
 		this.LayoutPageTraining.HasWindow = false;
 		this.MainNotebook.Add(this.LayoutPageTraining);
-		global::Gtk.Notebook.NotebookChild w4 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageTraining]));
-		w4.Position = 1;
+		global::Gtk.Notebook.NotebookChild w21 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageTraining]));
+		w21.Position = 1;
 		// Notebook tab
 		this.LabelPageTraining = new global::Gtk.Label();
 		this.LabelPageTraining.Name = "LabelPageTraining";
@@ -107,8 +260,8 @@ public partial class MainWindow
 		this.LayoutPageNetwork.Name = "LayoutPageNetwork";
 		this.LayoutPageNetwork.HasWindow = false;
 		this.MainNotebook.Add(this.LayoutPageNetwork);
-		global::Gtk.Notebook.NotebookChild w5 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageNetwork]));
-		w5.Position = 2;
+		global::Gtk.Notebook.NotebookChild w22 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageNetwork]));
+		w22.Position = 2;
 		// Notebook tab
 		this.LabelPageNetwork = new global::Gtk.Label();
 		this.LabelPageNetwork.Name = "LabelPageNetwork";
@@ -120,8 +273,8 @@ public partial class MainWindow
 		this.LayoutPagePlot.Name = "LayoutPagePlot";
 		this.LayoutPagePlot.HasWindow = false;
 		this.MainNotebook.Add(this.LayoutPagePlot);
-		global::Gtk.Notebook.NotebookChild w6 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPagePlot]));
-		w6.Position = 3;
+		global::Gtk.Notebook.NotebookChild w23 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPagePlot]));
+		w23.Position = 3;
 		// Notebook tab
 		this.LabelPagePlot = new global::Gtk.Label();
 		this.LabelPagePlot.Name = "LabelPagePlot";
@@ -133,8 +286,8 @@ public partial class MainWindow
 		this.LayoutPageAbout.Name = "LayoutPageAbout";
 		this.LayoutPageAbout.HasWindow = false;
 		this.MainNotebook.Add(this.LayoutPageAbout);
-		global::Gtk.Notebook.NotebookChild w7 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
-		w7.Position = 4;
+		global::Gtk.Notebook.NotebookChild w24 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
+		w24.Position = 4;
 		// Notebook tab
 		this.LabelPageAbout = new global::Gtk.Label();
 		this.LabelPageAbout.Name = "LabelPageAbout";
@@ -142,9 +295,20 @@ public partial class MainWindow
 		this.MainNotebook.SetTabLabel(this.LayoutPageAbout, this.LabelPageAbout);
 		this.LabelPageAbout.ShowAll();
 		this.MainLayout.Add(this.MainNotebook);
-		global::Gtk.Fixed.FixedChild w8 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
-		w8.X = 30;
-		w8.Y = 70;
+		global::Gtk.Fixed.FixedChild w25 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
+		w25.X = 30;
+		w25.Y = 70;
+		// Container child MainLayout.Gtk.Fixed+FixedChild
+		this.UIManager.AddUiFromString("<ui><toolbar name=\'MainToolbar\'><toolitem name=\'AboutButton\' action=\'AboutButton\'" +
+				"/><toolitem name=\'QuitButton\' action=\'QuitButton\'/></toolbar></ui>");
+		this.MainToolbar = ((global::Gtk.Toolbar)(this.UIManager.GetWidget("/MainToolbar")));
+		this.MainToolbar.Name = "MainToolbar";
+		this.MainToolbar.ShowArrow = false;
+		this.MainToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
+		this.MainLayout.Add(this.MainToolbar);
+		global::Gtk.Fixed.FixedChild w26 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainToolbar]));
+		w26.X = 30;
+		w26.Y = 20;
 		this.Add(this.MainLayout);
 		if ((this.Child != null))
 		{
@@ -154,5 +318,9 @@ public partial class MainWindow
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
 		this.AboutButton.Activated += new global::System.EventHandler(this.OnAboutButtonClicked);
 		this.QuitButton.Activated += new global::System.EventHandler(this.OnQuitButtonClicked);
+		this.OpenTrainingDataButton.Clicked += new global::System.EventHandler(this.OnOpenTrainingDataButtonClicked);
+		this.ReloadTrainingDataButton.Clicked += new global::System.EventHandler(this.OnReloadTrainingDataButtonClicked);
+		this.OpenTestDataButton.Clicked += new global::System.EventHandler(this.OnOpenTestDataButtonClicked);
+		this.ReloadTestDataButton.Clicked += new global::System.EventHandler(this.OnReloadTestDataButtonClicked);
 	}
 }
