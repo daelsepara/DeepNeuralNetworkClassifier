@@ -7,11 +7,27 @@
     <widget-library name="../bin/Debug/DeepNeuralNetworkClassifier.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="800 600">
+    <action-group name="Default">
+      <action id="AboutButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-help</property>
+        <property name="Tooltip" translatable="yes">About Deep Neural Network Classifier</property>
+        <signal name="Activated" handler="OnAboutButtonClicked" />
+      </action>
+      <action id="QuitButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-quit</property>
+        <property name="Tooltip" translatable="yes">Exit Deep Neural Network Classifier</property>
+        <signal name="Activated" handler="OnQuitButtonClicked" />
+      </action>
+    </action-group>
     <property name="MemberName" />
     <property name="WidthRequest">800</property>
     <property name="HeightRequest">600</property>
     <property name="Title" translatable="yes">MainWindow</property>
-    <property name="WindowPosition">CenterOnParent</property>
+    <property name="WindowPosition">CenterAlways</property>
     <property name="Resizable">False</property>
     <property name="DefaultWidth">800</property>
     <property name="DefaultHeight">600</property>
@@ -20,6 +36,122 @@
       <widget class="Gtk.Fixed" id="MainLayout">
         <property name="MemberName" />
         <property name="HasWindow">False</property>
+        <child>
+          <widget class="Gtk.Toolbar" id="MainToolbar">
+            <property name="MemberName" />
+            <property name="ShowArrow">False</property>
+            <property name="ButtonStyle">Icons</property>
+            <property name="IconSize">Button</property>
+            <node name="MainToolbar" type="Toolbar">
+              <node type="Toolitem" action="AboutButton" />
+              <node type="Toolitem" action="QuitButton" />
+            </node>
+          </widget>
+          <packing>
+            <property name="X">30</property>
+            <property name="Y">20</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Notebook" id="MainNotebook">
+            <property name="MemberName" />
+            <property name="WidthRequest">740</property>
+            <property name="HeightRequest">500</property>
+            <property name="CanFocus">True</property>
+            <property name="CurrentPage">0</property>
+            <child>
+              <widget class="Gtk.Fixed" id="LayoutPageData">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+              </widget>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPageData">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Data</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Fixed" id="LayoutPageTraining">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPageTraining">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Training</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Fixed" id="LayoutPageNetwork">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+              </widget>
+              <packing>
+                <property name="Position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPageNetwork">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Network</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Fixed" id="LayoutPagePlot">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+              </widget>
+              <packing>
+                <property name="Position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPagePlot">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Plot</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Fixed" id="LayoutPageAbout">
+                <property name="MemberName" />
+                <property name="HasWindow">False</property>
+              </widget>
+              <packing>
+                <property name="Position">4</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="LabelPageAbout">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">About</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="X">30</property>
+            <property name="Y">70</property>
+          </packing>
+        </child>
       </widget>
     </child>
   </widget>
