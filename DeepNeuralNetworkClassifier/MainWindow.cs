@@ -174,6 +174,111 @@ public partial class MainWindow : Gtk.Window
         ToggleControls(Paused);
     }
 
+    protected string GetBaseFileName(string fullpath)
+    {
+        return System.IO.Path.GetFileNameWithoutExtension(fullpath);
+    }
+
+    protected string GetDirectory(string fullpath)
+    {
+        return System.IO.Path.GetDirectoryName(fullpath);
+    }
+
+    protected void ReloadTextFile(string FileName, TextView view, bool isTraining = false, SpinButton counter = null)
+    {
+        try
+        {
+            var current = DelimiterBox.Active;
+            var delimiter = current >= 0 && current < Delimiters.Count ? Delimiters[current].Character : '\t';
+
+            var categories = new List<int>();
+
+            if (File.Exists(FileName) && view != null)
+            {
+                var text = "";
+
+                using (TextReader reader = File.OpenText(FileName))
+                {
+                    string line;
+                    var count = 0;
+
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        line = line.Trim();
+
+                        if (!string.IsNullOrEmpty(line))
+                        {
+                            if (isTraining && counter != null)
+                            {
+                                var tokens = line.Split(delimiter);
+
+                                if (tokens.Length > 1)
+                                {
+                                    var last = SafeConvert.ToInt32(tokens[tokens.Length - 1]);
+
+                                    if (!categories.Contains(last) && last > 0)
+                                    {
+                                        categories.Add(last);
+                                    }
+                                }
+                            }
+
+                            text += count > 0 ? "\n" + line : line;
+
+                            count++;
+                        }
+                    }
+                }
+
+                if (isTraining && counter != null)
+                {
+                    counter.Value = Convert.ToDouble(categories.Count, ci);
+                }
+
+                view.Buffer.Clear();
+
+                view.Buffer.Text = text.Trim();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: {0}", ex.Message);
+        }
+    }
+
+    protected void LoadTextFile(ref string FileName, string title, TextView view, Entry entry, bool isTraining = false, SpinButton counter = null)
+    {
+        TextLoader.Title = title;
+
+        // Add most recent directory
+        if (!string.IsNullOrEmpty(TextLoader.Filename))
+        {
+            var directory = System.IO.Path.GetDirectoryName(TextLoader.Filename);
+
+            if (Directory.Exists(directory))
+            {
+                TextLoader.SetCurrentFolder(directory);
+            }
+        }
+
+        if (TextLoader.Run() == (int)ResponseType.Accept)
+        {
+            if (!string.IsNullOrEmpty(TextLoader.Filename))
+            {
+                FileName = TextLoader.Filename;
+
+                ReloadTextFile(FileName, view, isTraining, counter);
+
+                if (entry != null)
+                {
+                    entry.Text = FileName;
+                }
+            }
+        }
+
+        TextLoader.Hide();
+    }
+
     protected void Run()
     {
         if (!Paused)
@@ -222,14 +327,41 @@ public partial class MainWindow : Gtk.Window
         parent.Move(label, x, y);
     }
 
-    protected string GetBaseFileName(string fullpath)
+    protected void UpdateParameters(TextView text, SpinButton counter, SpinButton counter2, bool isTraining = true)
     {
-        return System.IO.Path.GetFileNameWithoutExtension(fullpath);
-    }
+        var input = text.Buffer;
 
-    protected string GetDirectory(string fullpath)
-    {
-        return System.IO.Path.GetDirectoryName(fullpath);
+        var current = DelimiterBox.Active;
+
+        var delimiter = current >= 0 && current < Delimiters.Count ? Delimiters[current].Character : '\t';
+
+        if (input.LineCount > 0)
+        {
+            counter.Value = input.LineCount;
+
+            bool first = false;
+
+            using (StringReader reader = new StringReader(input.Text.Trim()))
+            {
+                var line = reader.ReadLine();
+
+                if (!string.IsNullOrEmpty(line))
+                {
+                    if (!first)
+                        first = true;
+
+                    var tokens = line.Split(delimiter);
+
+                    if (first)
+                    {
+                        if (isTraining && counter2 != null && tokens.Length > 0)
+                        {
+                            counter2.Value = tokens.Length - 1;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     protected void NormalizeData(ManagedArray input, ManagedArray normalization)
@@ -313,14 +445,28 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnOpenTrainingDataButtonClicked(object sender, EventArgs e)
     {
+        LoadTextFile(ref TrainingSetFileName, "Load Training Data", ViewTrainingData, FilenameTrainingData, true, Categories);
+
+        UpdateParameters(ViewTrainingData, Examples, InputLayerNodes, true);
+
+        //HiddenLayerNodes.Value = 2 * InputLayerNodes.Value;
     }
 
     protected void OnReloadTrainingDataButtonClicked(object sender, EventArgs e)
     {
+        if (!string.IsNullOrEmpty(TrainingSetFileName))
+            ReloadTextFile(TrainingSetFileName, ViewTrainingData, true, Categories);
+
+        UpdateParameters(ViewTrainingData, Examples, InputLayerNodes, true);
+
+        //HiddenLayerNodes.Value = 2 * InputLayerNodes.Value
     }
 
     protected void OnOpenTestDataButtonClicked(object sender, EventArgs e)
     {
+        LoadTextFile(ref TestSetFileName, "Load Test Data", ViewTestData, FilenameTestData, false, null);
+
+        UpdateParameters(ViewTestData, Samples, null, false);
     }
 
     protected void OnReloadTestDataButtonClicked(object sender, EventArgs e)

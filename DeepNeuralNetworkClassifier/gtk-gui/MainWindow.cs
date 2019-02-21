@@ -144,8 +144,6 @@ public partial class MainWindow
 		this.ViewTrainingData.WidthRequest = 0;
 		this.ViewTrainingData.HeightRequest = 0;
 		this.ViewTrainingData.Name = "ViewTrainingData";
-		this.ViewTrainingData.Editable = false;
-		this.ViewTrainingData.CursorVisible = false;
 		this.ViewTrainingData.AcceptsTab = false;
 		this.WindowTrainingData.Add(this.ViewTrainingData);
 		this.LayoutPageData.Add(this.WindowTrainingData);

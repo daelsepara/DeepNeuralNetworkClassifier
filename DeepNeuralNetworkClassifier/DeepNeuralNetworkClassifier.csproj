@@ -80,6 +80,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="Conrec.cs" />
     <Compile Include="Delimiter.cs" />
+    <Compile Include="SafeConvert.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
