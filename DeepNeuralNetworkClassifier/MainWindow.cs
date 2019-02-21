@@ -144,6 +144,46 @@ public partial class MainWindow : Gtk.Window
         Idle.Add(new IdleHandler(OnIdle));
     }
 
+    protected void ToggleControls(bool toggle)
+    {
+        FilenameTrainingData.Sensitive = toggle;
+        ViewTrainingData.Sensitive = toggle;
+        OpenTrainingDataButton.Sensitive = toggle;
+        ReloadTrainingDataButton.Sensitive = toggle;
+
+        FilenameTestData.Sensitive = toggle;
+        ViewTestData.Sensitive = toggle;
+        OpenTestDataButton.Sensitive = toggle;
+        ReloadTestDataButton.Sensitive = toggle;
+
+        InputLayerNodes.Sensitive = toggle;
+        Categories.Sensitive = toggle;
+        Examples.Sensitive = toggle;
+        Samples.Sensitive = toggle;
+
+        DelimiterBox.Sensitive = toggle;
+    }
+
+    protected void Pause()
+    {
+        if (Paused)
+            return;
+
+        Paused = true;
+
+        ToggleControls(Paused);
+    }
+
+    protected void Run()
+    {
+        if (!Paused)
+            return;
+
+        Paused = false;
+
+        ToggleControls(Paused);
+    }
+
     protected void UpdateDelimiterBox(ComboBox combo, List<Delimiter> delimeters)
     {
         combo.Clear();
@@ -284,6 +324,10 @@ public partial class MainWindow : Gtk.Window
     }
 
     protected void OnReloadTestDataButtonClicked(object sender, EventArgs e)
+    {
+    }
+
+    protected void OnMainNotebookSwitchPage(object o, SwitchPageArgs args)
     {
     }
 }
