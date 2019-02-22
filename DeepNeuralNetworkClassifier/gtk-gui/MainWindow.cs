@@ -210,7 +210,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 500;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 0;
+		this.MainNotebook.CurrentPage = 1;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
@@ -455,7 +455,7 @@ public partial class MainWindow
 		this.LearningRate.Adjustment.PageIncrement = 1D;
 		this.LearningRate.ClimbRate = 1D;
 		this.LearningRate.Numeric = true;
-		this.LearningRate.Value = 1D;
+		this.LearningRate.Value = 200D;
 		this.LayoutPageTraining.Add(this.LearningRate);
 		global::Gtk.Fixed.FixedChild w30 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageTraining[this.LearningRate]));
 		w30.X = 30;

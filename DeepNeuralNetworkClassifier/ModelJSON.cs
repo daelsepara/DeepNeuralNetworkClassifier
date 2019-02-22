@@ -65,7 +65,7 @@ namespace DeepLearnCS
 
             for (var layer = 0; layer < model.Weights.Count; layer++)
             {
-                network.Weights.Add(Set(model.Weights[layer]));
+                //network.Weights.Add(Set(model.Weights[layer]));
             }
 
             return network;

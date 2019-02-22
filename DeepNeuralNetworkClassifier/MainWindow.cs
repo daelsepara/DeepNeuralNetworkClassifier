@@ -13,7 +13,7 @@ public partial class MainWindow : Gtk.Window
     Dialog Confirm;
 
     FileChooserDialog TextLoader, JsonLoader, JsonSaver, ImageSaver;
-    string TrainingSetFileName, TestSetFileName;
+    string TrainingSetFileName, TestDataFileName;
     string WeightsFileName;
 
     List<Delimiter> Delimiters = new List<Delimiter>();
@@ -150,18 +150,37 @@ public partial class MainWindow : Gtk.Window
         ViewTrainingData.Sensitive = toggle;
         OpenTrainingDataButton.Sensitive = toggle;
         ReloadTrainingDataButton.Sensitive = toggle;
+        Examples.Sensitive = toggle;
+        InputLayerNodes.Sensitive = toggle;
+        Categories.Sensitive = toggle;
 
         FilenameTestData.Sensitive = toggle;
         ViewTestData.Sensitive = toggle;
         OpenTestDataButton.Sensitive = toggle;
         ReloadTestDataButton.Sensitive = toggle;
-
-        InputLayerNodes.Sensitive = toggle;
-        Categories.Sensitive = toggle;
-        Examples.Sensitive = toggle;
         Samples.Sensitive = toggle;
 
         DelimiterBox.Sensitive = toggle;
+
+        LearningRate.Sensitive = toggle;
+        HiddenLayerNodes.Sensitive = toggle;
+        HiddenLayers.Sensitive = toggle;
+        Tolerance.Sensitive = toggle;
+        ViewClassification.Sensitive = toggle;
+        Threshold.Sensitive = toggle;
+
+        StartButton.Sensitive = toggle;
+        StopButton.Sensitive = !toggle;
+        ResetButton.Sensitive = toggle;
+        ClassifyButton.Sensitive = toggle;
+
+        HiddenLayerWeightSelector.Sensitive = toggle;
+        ViewHiddenLayerWeights.Sensitive = toggle;
+        OpenNetworkButton.Sensitive = toggle;
+        SaveNetworkButton.Sensitive = toggle;
+        FilenameNetwork.Sensitive = toggle;
+
+        LoadNetworkButton.Sensitive = toggle;
     }
 
     protected void Pause()
@@ -170,6 +189,16 @@ public partial class MainWindow : Gtk.Window
             return;
 
         Paused = true;
+
+        ToggleControls(Paused);
+    }
+
+    protected void Run()
+    {
+        if (!Paused)
+            return;
+
+        Paused = false;
 
         ToggleControls(Paused);
     }
@@ -279,16 +308,6 @@ public partial class MainWindow : Gtk.Window
         TextLoader.Hide();
     }
 
-    protected void Run()
-    {
-        if (!Paused)
-            return;
-
-        Paused = false;
-
-        ToggleControls(Paused);
-    }
-
     protected void UpdateDelimiterBox(ComboBox combo, List<Delimiter> delimeters)
     {
         combo.Clear();
@@ -364,6 +383,66 @@ public partial class MainWindow : Gtk.Window
         }
     }
 
+    protected void UpdateClassifierInfo()
+    {
+        if (NetworkSetuped)
+        {
+            Iterations.Text = Network.Iterations.ToString(ci);
+            ErrorCost.Text = Network.L2.ToString("0.#####e+00", ci);
+        }
+    }
+
+    protected void UpdateProgressBar()
+    {
+        if (Epochs.Value > 0)
+        {
+            ProgressBar.Fraction = Math.Round(CurrentEpoch / Epochs.Value, 2);
+
+            ProgressBar.Text = TrainingDone ? "Done" : string.Format("Training ({0}%)...", Convert.ToInt32(ProgressBar.Fraction * 100, ci));
+        }
+    }
+
+    protected void UpdateTrainingDisplay()
+    {
+        UpdateClassifierInfo();
+        UpdateProgressBar();
+    }
+
+    protected void Classify()
+    {
+        var test = ViewTestData.Buffer.Text.Trim();
+
+        if (string.IsNullOrEmpty(test))
+            return;
+
+        if (NetworkSetuped && SetupTestData(test))
+        {
+            var TestOptions = Options;
+
+            TestOptions.Items = TestData.y;
+
+            var classification = Network.Classify(TestData, TestOptions, Threshold.Value / 100);
+
+            ViewClassification.Buffer.Clear();
+
+            string text = "";
+
+            for (var i = 0; i < classification.x; i++)
+            {
+                text += Convert.ToString(classification[i], ci);
+
+                if (i < classification.x - 1)
+                    text += "\n";
+            }
+
+            ViewClassification.Buffer.Text = text;
+
+            classification.Free();
+        }
+
+        ViewTestData.Buffer.Text = test;
+    }
+
     protected void NormalizeData(ManagedArray input, ManagedArray normalization)
     {
         for (int y = 0; y < input.y; y++)
@@ -375,6 +454,225 @@ public partial class MainWindow : Gtk.Window
 
                 input[x, y] = (input[x, y] - min) / (max - min);
             }
+        }
+    }
+
+    protected bool SetupInputData(string training)
+    {
+        var text = training.Trim();
+
+        if (string.IsNullOrEmpty(text))
+            return false;
+
+        var TrainingBuffer = new TextBuffer(new TextTagTable())
+        {
+            Text = text
+        };
+
+        Examples.Value = Convert.ToDouble(TrainingBuffer.LineCount, ci);
+
+        var inpx = Convert.ToInt32(InputLayerNodes.Value, ci);
+        var inpy = Convert.ToInt32(Examples.Value, ci);
+
+        ManagedOps.Free(InputData, OutputData, NormalizationData);
+
+        InputData = new ManagedArray(inpx, inpy);
+        NormalizationData = new ManagedArray(inpx, 2);
+        OutputData = new ManagedArray(1, inpy);
+
+        int min = 0;
+        int max = 1;
+
+        for (int x = 0; x < inpx; x++)
+        {
+            NormalizationData[x, min] = double.MaxValue;
+            NormalizationData[x, max] = double.MinValue;
+        }
+
+        var current = DelimiterBox.Active;
+        var delimiter = current >= 0 && current < Delimiters.Count ? Delimiters[current].Character : '\t';
+        var inputs = inpx;
+
+        using (var reader = new StringReader(TrainingBuffer.Text))
+        {
+            for (int y = 0; y < inpy; y++)
+            {
+                var line = reader.ReadLine();
+
+                if (!string.IsNullOrEmpty(line))
+                {
+                    var tokens = line.Split(delimiter);
+
+                    if (inputs > 0 && tokens.Length > inputs)
+                    {
+                        OutputData[0, y] = SafeConvert.ToDouble(tokens[inputs]);
+
+                        for (int x = 0; x < inpx; x++)
+                        {
+                            var data = SafeConvert.ToDouble(tokens[x]);
+
+                            NormalizationData[x, min] = data < NormalizationData[x, min] ? data : NormalizationData[x, min];
+                            NormalizationData[x, max] = data > NormalizationData[x, max] ? data : NormalizationData[x, max];
+
+                            InputData[x, y] = data;
+                        }
+                    }
+                }
+            }
+        }
+
+        NormalizeData(InputData, NormalizationData);
+
+        UpdateTextView(ViewNormalization, NormalizationData);
+
+        return true;
+    }
+
+    protected bool SetupTestData(string test)
+    {
+        var text = test.Trim();
+
+        if (string.IsNullOrEmpty(text))
+            return false;
+
+        var TestBuffer = new TextBuffer(new TextTagTable())
+        {
+            Text = text
+        };
+
+        Samples.Value = Convert.ToDouble(TestBuffer.LineCount, ci);
+
+        var inpx = Convert.ToInt32(InputLayerNodes.Value, ci);
+        var tsty = Convert.ToInt32(Samples.Value, ci);
+
+        ManagedOps.Free(TestData);
+
+        TestData = new ManagedArray(inpx, tsty);
+
+        var current = DelimiterBox.Active;
+        var delimiter = current >= 0 && current < Delimiters.Count ? Delimiters[current].Character : '\t';
+        var inputs = inpx;
+
+        using (var reader = new StringReader(TestBuffer.Text))
+        {
+            for (int y = 0; y < tsty; y++)
+            {
+                var line = reader.ReadLine();
+
+                if (!string.IsNullOrEmpty(line))
+                {
+                    var tokens = line.Split(delimiter);
+
+                    if (inputs > 0 && tokens.Length >= inpx)
+                    {
+                        for (int x = 0; x < inpx; x++)
+                        {
+                            TestData[x, y] = SafeConvert.ToDouble(tokens[x]);
+                        }
+                    }
+                }
+            }
+        }
+
+        NormalizeData(TestData, NormalizationData);
+
+        return true;
+    }
+
+    protected void SetupNetworkTraining()
+    {
+        NetworkSetuped = false;
+
+        var training = ViewTrainingData.Buffer.Text.Trim();
+
+        if (string.IsNullOrEmpty(training))
+            return;
+
+        NetworkSetuped = SetupInputData(training);
+
+        // Reset Network
+        Network.Free();
+
+        Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) / 100;
+        Options.Epochs = Convert.ToInt32(Epochs.Value, ci);
+        Options.Inputs = Convert.ToInt32(InputLayerNodes.Value, ci);
+        Options.Categories = Convert.ToInt32(Categories.Value, ci);
+        Options.Items = InputData.y;
+        Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
+        Options.HiddenLayers = Convert.ToInt32(HiddenLayers.Value, ci);
+        Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
+
+        if (UseOptimizer.Active)
+        {
+            //Network.SetupOptimizer(InputData, OutputData, Options, true);
+        }
+        else
+        {
+            Network.Setup(OutputData, Options, true);
+        }
+
+        ViewTrainingData.Buffer.Text = training;
+    }
+
+    protected void SetupNetworkWeights()
+    {
+
+    }
+
+    protected void SetupNetwork()
+    {
+        NetworkSetuped = false;
+
+        // Reset Network
+        Network.Free();
+
+        Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) / 100;
+        Options.Epochs = Convert.ToInt32(Epochs.Value, ci);
+        Options.Inputs = Convert.ToInt32(InputLayerNodes.Value, ci);
+        Options.Categories = Convert.ToInt32(Categories.Value, ci);
+        Options.Items = InputData.y;
+        Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
+        Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
+
+        TrainingDone = false;
+
+        CurrentEpoch = 0;
+
+        Iterations.Text = "";
+        ErrorCost.Text = "";
+        ProgressBar.Text = "";
+
+        TrainingDone = false;
+        UseOptimizer.Sensitive = true;
+        Epochs.Sensitive = true;
+    }
+
+    protected void UpdateTextView(TextView view, ManagedArray data)
+    {
+        if (data != null)
+        {
+            var current = DelimiterBox.Active;
+            var delimiter = current >= 0 && current < Delimiters.Count ? Delimiters[current].Character : '\t';
+
+            view.Buffer.Clear();
+
+            var text = "";
+
+            for (int y = 0; y < data.y; y++)
+            {
+                if (y > 0)
+                    text += "\n";
+
+                for (int x = 0; x < data.x; x++)
+                {
+                    if (x > 0)
+                        text += delimiter;
+
+                    text += data[x, y].ToString(ci);
+                }
+            }
+
+            view.Buffer.Text = text;
         }
     }
 
@@ -438,6 +736,42 @@ public partial class MainWindow : Gtk.Window
     {
         Processing.WaitOne();
 
+        if (!Paused && NetworkSetuped)
+        {
+            //var result = UseOptimizer.Active ? Network.StepOptimizer(InputData, Options) : Network.Step(InputData, Options);
+
+            var result = Network.Step(InputData, Options);
+
+            CurrentEpoch = Network.Iterations;
+
+            if (result)
+            {
+                var Epoch = Convert.ToInt32(Epochs.Value, ci);
+
+                //UpdateNetworkWeights();
+
+                CurrentEpoch = Epoch;
+
+                TrainingDone = true;
+
+                NetworkLoaded = false;
+
+                Classify();
+
+                UseOptimizer.Sensitive = true;
+                Epochs.Sensitive = true;
+
+                UpdateTrainingDisplay();
+
+                Pause();
+            }
+
+            if (CurrentEpoch % 1000 == 0)
+            {
+                UpdateTrainingDisplay();
+            }
+        }
+
         Processing.ReleaseMutex();
 
         return true;
@@ -464,13 +798,17 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnOpenTestDataButtonClicked(object sender, EventArgs e)
     {
-        LoadTextFile(ref TestSetFileName, "Load Test Data", ViewTestData, FilenameTestData, false, null);
+        LoadTextFile(ref TestDataFileName, "Load Test Data", ViewTestData, FilenameTestData, false, null);
 
         UpdateParameters(ViewTestData, Samples, null, false);
     }
 
     protected void OnReloadTestDataButtonClicked(object sender, EventArgs e)
     {
+        if (!string.IsNullOrEmpty(TestDataFileName))
+            ReloadTextFile(TestDataFileName, ViewTestData);
+
+        UpdateParameters(ViewTestData, Samples, null, false);
     }
 
     protected void OnMainNotebookSwitchPage(object o, SwitchPageArgs args)
@@ -502,14 +840,69 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnStartButtonClicked(object sender, EventArgs e)
     {
+        if (!Paused)
+            return;
+
+        if (TrainingDone)
+        {
+            TrainingDone = false;
+
+            NetworkSetuped = false || NetworkLoaded;
+
+            CurrentEpoch = 0;
+        }
+
+        if (!NetworkSetuped)
+        {
+            Epochs.Sensitive = false;
+
+            UseOptimizer.Sensitive = false;
+
+            SetupNetworkTraining();
+
+            ViewClassification.Buffer.Clear();
+
+            CurrentEpoch = Network.Iterations;
+        }
+
+        UpdateProgressBar();
+
+        if (NetworkSetuped)
+            Run();
     }
 
     protected void OnStopButtonClicked(object sender, EventArgs e)
     {
+        if (Paused)
+            return;
+
+        UpdateTrainingDisplay();
+
+        Pause();
     }
 
     protected void OnResetButtonClicked(object sender, EventArgs e)
     {
+        if (!Paused)
+            return;
+
+        CurrentEpoch = 0;
+
+        UpdateProgressBar();
+
+        Iterations.Text = "";
+        ErrorCost.Text = "";
+
+        NetworkSetuped = false;
+
+        NetworkLoaded = false;
+
+        TrainingDone = false;
+
+        //UseOptimizer.Sensitive = true;
+        Epochs.Sensitive = true;
+
+        ProgressBar.Text = "";
     }
 
     protected void OnClassifyButtonClicked(object sender, EventArgs e)
