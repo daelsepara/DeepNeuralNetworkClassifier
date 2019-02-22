@@ -681,7 +681,7 @@
                   </widget>
                   <packing>
                     <property name="X">450</property>
-                    <property name="Y">220</property>
+                    <property name="Y">250</property>
                   </packing>
                 </child>
                 <child>
@@ -705,6 +705,20 @@
                   <packing>
                     <property name="X">450</property>
                     <property name="Y">180</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.CheckButton" id="UseL2">
+                    <property name="MemberName" />
+                    <property name="Label" translatable="yes">Use L2 Error for training</property>
+                    <property name="DrawIndicator">True</property>
+                    <property name="HasLabel">True</property>
+                    <property name="UseUnderline">True</property>
+                    <property name="FocusOnClick">False</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
+                    <property name="Y">220</property>
                   </packing>
                 </child>
               </widget>

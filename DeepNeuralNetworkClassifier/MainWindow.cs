@@ -604,6 +604,7 @@ public partial class MainWindow : Gtk.Window
         Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
         Options.HiddenLayers = Convert.ToInt32(HiddenLayers.Value, ci);
         Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
+        Options.UseL2 = UseL2.Active;
 
         if (UseOptimizer.Active)
         {
@@ -648,6 +649,7 @@ public partial class MainWindow : Gtk.Window
 
         TrainingDone = false;
         UseOptimizer.Sensitive = true;
+        UseL2.Sensitive = true;
         Epochs.Sensitive = true;
     }
 
@@ -761,6 +763,7 @@ public partial class MainWindow : Gtk.Window
                 Classify();
 
                 UseOptimizer.Sensitive = true;
+                UseL2.Sensitive = true;
                 Epochs.Sensitive = true;
 
                 UpdateTrainingDisplay();
@@ -857,8 +860,8 @@ public partial class MainWindow : Gtk.Window
         if (!NetworkSetuped)
         {
             Epochs.Sensitive = false;
-
             UseOptimizer.Sensitive = false;
+            UseL2.Sensitive = false;
 
             SetupNetworkTraining();
 
@@ -903,6 +906,8 @@ public partial class MainWindow : Gtk.Window
         TrainingDone = false;
 
         UseOptimizer.Sensitive = true;
+        UseL2.Sensitive = true;
+
         Epochs.Sensitive = true;
 
         ProgressBar.Text = "";

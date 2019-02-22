@@ -125,6 +125,8 @@ public partial class MainWindow
 
 	private global::Gtk.Entry L2;
 
+	private global::Gtk.CheckButton UseL2;
+
 	private global::Gtk.Label LabelPageTraining;
 
 	private global::Gtk.Fixed LayoutPageNetwork;
@@ -214,7 +216,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 500;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 1;
+		this.MainNotebook.CurrentPage = 0;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
@@ -682,7 +684,7 @@ public partial class MainWindow
 		this.LayoutPageTraining.Add(this.UseOptimizer);
 		global::Gtk.Fixed.FixedChild w52 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageTraining[this.UseOptimizer]));
 		w52.X = 450;
-		w52.Y = 220;
+		w52.Y = 250;
 		// Container child LayoutPageTraining.Gtk.Fixed+FixedChild
 		this.LabelL2 = new global::Gtk.Label();
 		this.LabelL2.Name = "LabelL2";
@@ -702,9 +704,20 @@ public partial class MainWindow
 		global::Gtk.Fixed.FixedChild w54 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageTraining[this.L2]));
 		w54.X = 450;
 		w54.Y = 180;
+		// Container child LayoutPageTraining.Gtk.Fixed+FixedChild
+		this.UseL2 = new global::Gtk.CheckButton();
+		this.UseL2.Name = "UseL2";
+		this.UseL2.Label = global::Mono.Unix.Catalog.GetString("Use L2 Error for training");
+		this.UseL2.DrawIndicator = true;
+		this.UseL2.UseUnderline = true;
+		this.UseL2.FocusOnClick = false;
+		this.LayoutPageTraining.Add(this.UseL2);
+		global::Gtk.Fixed.FixedChild w55 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageTraining[this.UseL2]));
+		w55.X = 450;
+		w55.Y = 220;
 		this.MainNotebook.Add(this.LayoutPageTraining);
-		global::Gtk.Notebook.NotebookChild w55 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageTraining]));
-		w55.Position = 1;
+		global::Gtk.Notebook.NotebookChild w56 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageTraining]));
+		w56.Position = 1;
 		// Notebook tab
 		this.LabelPageTraining = new global::Gtk.Label();
 		this.LabelPageTraining.Name = "LabelPageTraining";
@@ -721,17 +734,17 @@ public partial class MainWindow
 		this.LabelHiddenLayerWeights.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Hidden layer weights</b>");
 		this.LabelHiddenLayerWeights.UseMarkup = true;
 		this.LayoutPageNetwork.Add(this.LabelHiddenLayerWeights);
-		global::Gtk.Fixed.FixedChild w56 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelHiddenLayerWeights]));
-		w56.X = 30;
-		w56.Y = 20;
+		global::Gtk.Fixed.FixedChild w57 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelHiddenLayerWeights]));
+		w57.X = 30;
+		w57.Y = 20;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.HiddenLayerWeightSelector = global::Gtk.ComboBox.NewText();
 		this.HiddenLayerWeightSelector.WidthRequest = 300;
 		this.HiddenLayerWeightSelector.Name = "HiddenLayerWeightSelector";
 		this.LayoutPageNetwork.Add(this.HiddenLayerWeightSelector);
-		global::Gtk.Fixed.FixedChild w57 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.HiddenLayerWeightSelector]));
-		w57.X = 30;
-		w57.Y = 190;
+		global::Gtk.Fixed.FixedChild w58 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.HiddenLayerWeightSelector]));
+		w58.X = 30;
+		w58.Y = 190;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.WindowHiddenLayerWeights = new global::Gtk.ScrolledWindow();
 		this.WindowHiddenLayerWeights.WidthRequest = 300;
@@ -745,18 +758,18 @@ public partial class MainWindow
 		this.ViewHiddenLayerWeights.Editable = false;
 		this.WindowHiddenLayerWeights.Add(this.ViewHiddenLayerWeights);
 		this.LayoutPageNetwork.Add(this.WindowHiddenLayerWeights);
-		global::Gtk.Fixed.FixedChild w59 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.WindowHiddenLayerWeights]));
-		w59.X = 30;
-		w59.Y = 40;
+		global::Gtk.Fixed.FixedChild w60 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.WindowHiddenLayerWeights]));
+		w60.X = 30;
+		w60.Y = 40;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.LabelOutputLayerWeights = new global::Gtk.Label();
 		this.LabelOutputLayerWeights.Name = "LabelOutputLayerWeights";
 		this.LabelOutputLayerWeights.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Output layer weights</b>");
 		this.LabelOutputLayerWeights.UseMarkup = true;
 		this.LayoutPageNetwork.Add(this.LabelOutputLayerWeights);
-		global::Gtk.Fixed.FixedChild w60 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelOutputLayerWeights]));
-		w60.X = 30;
-		w60.Y = 230;
+		global::Gtk.Fixed.FixedChild w61 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelOutputLayerWeights]));
+		w61.X = 30;
+		w61.Y = 230;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.WindowOutputLayerWeights = new global::Gtk.ScrolledWindow();
 		this.WindowOutputLayerWeights.WidthRequest = 300;
@@ -769,9 +782,9 @@ public partial class MainWindow
 		this.ViewOutputLayerWeights.Editable = false;
 		this.WindowOutputLayerWeights.Add(this.ViewOutputLayerWeights);
 		this.LayoutPageNetwork.Add(this.WindowOutputLayerWeights);
-		global::Gtk.Fixed.FixedChild w62 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.WindowOutputLayerWeights]));
-		w62.X = 30;
-		w62.Y = 250;
+		global::Gtk.Fixed.FixedChild w63 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.WindowOutputLayerWeights]));
+		w63.X = 30;
+		w63.Y = 250;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.UIManager.AddUiFromString("<ui><toolbar name=\'LoadNetworkToolbar\'><toolitem name=\'LoadNetworkButton\' action=" +
 				"\'LoadNetworkButton\'/></toolbar></ui>");
@@ -779,27 +792,27 @@ public partial class MainWindow
 		this.LoadNetworkToolbar.Name = "LoadNetworkToolbar";
 		this.LoadNetworkToolbar.ShowArrow = false;
 		this.LayoutPageNetwork.Add(this.LoadNetworkToolbar);
-		global::Gtk.Fixed.FixedChild w63 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LoadNetworkToolbar]));
-		w63.X = 30;
-		w63.Y = 400;
+		global::Gtk.Fixed.FixedChild w64 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LoadNetworkToolbar]));
+		w64.X = 30;
+		w64.Y = 400;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.LabelLoadNetworkWeights = new global::Gtk.Label();
 		this.LabelLoadNetworkWeights.Name = "LabelLoadNetworkWeights";
 		this.LabelLoadNetworkWeights.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Load weights into network</b>");
 		this.LabelLoadNetworkWeights.UseMarkup = true;
 		this.LayoutPageNetwork.Add(this.LabelLoadNetworkWeights);
-		global::Gtk.Fixed.FixedChild w64 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelLoadNetworkWeights]));
-		w64.X = 90;
-		w64.Y = 410;
+		global::Gtk.Fixed.FixedChild w65 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelLoadNetworkWeights]));
+		w65.X = 90;
+		w65.Y = 410;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.LabelNormalization = new global::Gtk.Label();
 		this.LabelNormalization.Name = "LabelNormalization";
 		this.LabelNormalization.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Normalization</b>");
 		this.LabelNormalization.UseMarkup = true;
 		this.LayoutPageNetwork.Add(this.LabelNormalization);
-		global::Gtk.Fixed.FixedChild w65 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelNormalization]));
-		w65.X = 360;
-		w65.Y = 20;
+		global::Gtk.Fixed.FixedChild w66 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelNormalization]));
+		w66.X = 360;
+		w66.Y = 20;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.WindowNormalization = new global::Gtk.ScrolledWindow();
 		this.WindowNormalization.WidthRequest = 300;
@@ -812,18 +825,18 @@ public partial class MainWindow
 		this.ViewNormalization.Editable = false;
 		this.WindowNormalization.Add(this.ViewNormalization);
 		this.LayoutPageNetwork.Add(this.WindowNormalization);
-		global::Gtk.Fixed.FixedChild w67 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.WindowNormalization]));
-		w67.X = 360;
-		w67.Y = 40;
+		global::Gtk.Fixed.FixedChild w68 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.WindowNormalization]));
+		w68.X = 360;
+		w68.Y = 40;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.LabelNetwork = new global::Gtk.Label();
 		this.LabelNetwork.Name = "LabelNetwork";
 		this.LabelNetwork.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Network</b>");
 		this.LabelNetwork.UseMarkup = true;
 		this.LayoutPageNetwork.Add(this.LabelNetwork);
-		global::Gtk.Fixed.FixedChild w68 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelNetwork]));
-		w68.X = 360;
-		w68.Y = 230;
+		global::Gtk.Fixed.FixedChild w69 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelNetwork]));
+		w69.X = 360;
+		w69.Y = 230;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.FilenameNetwork = new global::Gtk.Entry();
 		this.FilenameNetwork.WidthRequest = 230;
@@ -832,36 +845,36 @@ public partial class MainWindow
 		this.FilenameNetwork.IsEditable = true;
 		this.FilenameNetwork.InvisibleChar = '•';
 		this.LayoutPageNetwork.Add(this.FilenameNetwork);
-		global::Gtk.Fixed.FixedChild w69 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.FilenameNetwork]));
-		w69.X = 360;
-		w69.Y = 250;
+		global::Gtk.Fixed.FixedChild w70 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.FilenameNetwork]));
+		w70.X = 360;
+		w70.Y = 250;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.OpenNetworkButton = new global::Gtk.Button();
 		this.OpenNetworkButton.Name = "OpenNetworkButton";
 		this.OpenNetworkButton.UseUnderline = true;
 		this.OpenNetworkButton.FocusOnClick = false;
-		global::Gtk.Image w70 = new global::Gtk.Image();
-		w70.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-open", global::Gtk.IconSize.Menu);
-		this.OpenNetworkButton.Image = w70;
+		global::Gtk.Image w71 = new global::Gtk.Image();
+		w71.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-open", global::Gtk.IconSize.Menu);
+		this.OpenNetworkButton.Image = w71;
 		this.LayoutPageNetwork.Add(this.OpenNetworkButton);
-		global::Gtk.Fixed.FixedChild w71 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.OpenNetworkButton]));
-		w71.X = 600;
-		w71.Y = 250;
+		global::Gtk.Fixed.FixedChild w72 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.OpenNetworkButton]));
+		w72.X = 600;
+		w72.Y = 250;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.SaveNetworkButton = new global::Gtk.Button();
 		this.SaveNetworkButton.Name = "SaveNetworkButton";
 		this.SaveNetworkButton.UseUnderline = true;
 		this.SaveNetworkButton.FocusOnClick = false;
-		global::Gtk.Image w72 = new global::Gtk.Image();
-		w72.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-save", global::Gtk.IconSize.Menu);
-		this.SaveNetworkButton.Image = w72;
+		global::Gtk.Image w73 = new global::Gtk.Image();
+		w73.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-save", global::Gtk.IconSize.Menu);
+		this.SaveNetworkButton.Image = w73;
 		this.LayoutPageNetwork.Add(this.SaveNetworkButton);
-		global::Gtk.Fixed.FixedChild w73 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.SaveNetworkButton]));
-		w73.X = 630;
-		w73.Y = 250;
+		global::Gtk.Fixed.FixedChild w74 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.SaveNetworkButton]));
+		w74.X = 630;
+		w74.Y = 250;
 		this.MainNotebook.Add(this.LayoutPageNetwork);
-		global::Gtk.Notebook.NotebookChild w74 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageNetwork]));
-		w74.Position = 2;
+		global::Gtk.Notebook.NotebookChild w75 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageNetwork]));
+		w75.Position = 2;
 		// Notebook tab
 		this.LabelPageNetwork = new global::Gtk.Label();
 		this.LabelPageNetwork.Name = "LabelPageNetwork";
@@ -873,8 +886,8 @@ public partial class MainWindow
 		this.LayoutPagePlot.Name = "LayoutPagePlot";
 		this.LayoutPagePlot.HasWindow = false;
 		this.MainNotebook.Add(this.LayoutPagePlot);
-		global::Gtk.Notebook.NotebookChild w75 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPagePlot]));
-		w75.Position = 3;
+		global::Gtk.Notebook.NotebookChild w76 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPagePlot]));
+		w76.Position = 3;
 		// Notebook tab
 		this.LabelPagePlot = new global::Gtk.Label();
 		this.LabelPagePlot.Name = "LabelPagePlot";
@@ -886,8 +899,8 @@ public partial class MainWindow
 		this.LayoutPageAbout.Name = "LayoutPageAbout";
 		this.LayoutPageAbout.HasWindow = false;
 		this.MainNotebook.Add(this.LayoutPageAbout);
-		global::Gtk.Notebook.NotebookChild w76 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
-		w76.Position = 4;
+		global::Gtk.Notebook.NotebookChild w77 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
+		w77.Position = 4;
 		// Notebook tab
 		this.LabelPageAbout = new global::Gtk.Label();
 		this.LabelPageAbout.Name = "LabelPageAbout";
@@ -895,9 +908,9 @@ public partial class MainWindow
 		this.MainNotebook.SetTabLabel(this.LayoutPageAbout, this.LabelPageAbout);
 		this.LabelPageAbout.ShowAll();
 		this.MainLayout.Add(this.MainNotebook);
-		global::Gtk.Fixed.FixedChild w77 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
-		w77.X = 30;
-		w77.Y = 70;
+		global::Gtk.Fixed.FixedChild w78 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
+		w78.X = 30;
+		w78.Y = 70;
 		// Container child MainLayout.Gtk.Fixed+FixedChild
 		this.UIManager.AddUiFromString("<ui><toolbar name=\'MainToolbar\'><toolitem name=\'AboutButton\' action=\'AboutButton\'" +
 				"/><toolitem name=\'QuitButton\' action=\'QuitButton\'/></toolbar></ui>");
@@ -906,9 +919,9 @@ public partial class MainWindow
 		this.MainToolbar.ShowArrow = false;
 		this.MainToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
 		this.MainLayout.Add(this.MainToolbar);
-		global::Gtk.Fixed.FixedChild w78 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainToolbar]));
-		w78.X = 30;
-		w78.Y = 20;
+		global::Gtk.Fixed.FixedChild w79 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainToolbar]));
+		w79.X = 30;
+		w79.Y = 20;
 		this.Add(this.MainLayout);
 		if ((this.Child != null))
 		{
