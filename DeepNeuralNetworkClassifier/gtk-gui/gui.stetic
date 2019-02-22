@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <stetic-interface>
   <configuration>
     <images-root-path>..</images-root-path>
@@ -838,7 +838,7 @@
                     <property name="UseMarkup">True</property>
                   </widget>
                   <packing>
-                    <property name="X">90</property>
+                    <property name="X">70</property>
                     <property name="Y">410</property>
                   </packing>
                 </child>
