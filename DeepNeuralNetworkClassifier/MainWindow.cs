@@ -912,6 +912,10 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnClassifyButtonClicked(object sender, EventArgs e)
     {
+        if (!Paused)
+            return;
+
+        Classify();
     }
 
     protected void OnLoadNetworkButtonClicked(object sender, EventArgs e)

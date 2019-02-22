@@ -5,8 +5,6 @@ namespace DeepLearnCS
 {
     public class ManagedDNN
     {
-        //public List<ManagedArray> Weights = new List<ManagedArray>();
-        //public List<ManagedArray> Deltas = new List<ManagedArray>();
         public ManagedArray[] Weights;
         public ManagedArray[] Deltas;
 
@@ -14,14 +12,10 @@ namespace DeepLearnCS
         public ManagedArray Y_true;
 
         // intermediate results
-        //public List<ManagedArray> X = new List<ManagedArray>();
-        //public List<ManagedArray> Z = new List<ManagedArray>();
         public ManagedArray[] X;
         public ManagedArray[] Z;
 
         // internal use
-        //private List<ManagedArray> Activations = new List<ManagedArray>();
-        //private List<ManagedArray> D = new List<ManagedArray>();
         private ManagedArray[] Activations;
         private ManagedArray[] D;
 
@@ -71,8 +65,6 @@ namespace DeepLearnCS
             {
                 ManagedOps.Free(Activations[layer]);
             }
-
-            //Activations.Clear();
 
             ManagedOps.Free(InputBias);
         }
@@ -133,10 +125,6 @@ namespace DeepLearnCS
             {
                 ManagedOps.Free(D[layer], X[layer], Z[layer]);
             }
-
-            //D.Clear();
-            //X.Clear();
-            //Z.Clear();
         }
 
         public void ClearDeltas()
@@ -146,8 +134,6 @@ namespace DeepLearnCS
                 // cleanup of arrays allocated in BackPropagation
                 ManagedOps.Free(Deltas[layer]);
             }
-
-            //Deltas.Clear();
         }
 
         public void ApplyGradients(NeuralNetworkOptions opts)
@@ -230,9 +216,6 @@ namespace DeepLearnCS
                 ManagedOps.Free(X[layer], Z[layer]);
             }
 
-            //X.Clear();
-            //Z.Clear();
-
             return prediction;
         }
 
@@ -275,9 +258,6 @@ namespace DeepLearnCS
             {
                 ManagedOps.Free(X[layer], Z[layer]);
             }
-
-            //X.Clear();
-            //Z.Clear();
 
             return classification;
         }
@@ -347,19 +327,11 @@ namespace DeepLearnCS
                     {
                         ManagedOps.Free(Weights[layer]);
                     }
-
-                    //Weights.Clear();
                 }
 
                 Weights = new ManagedArray[opts.HiddenLayers + 1];
-                Weights[0] = new ManagedArray(opts.Inputs + 1, opts.Nodes);
 
-                /*
-                Weights = new List<ManagedArray>
-                {
-                    new ManagedArray(opts.Inputs + 1, opts.Nodes)
-                };
-                */
+                Weights[0] = new ManagedArray(opts.Inputs + 1, opts.Nodes);
 
                 for (var layer = 1; layer < opts.HiddenLayers; layer++)
                 {
