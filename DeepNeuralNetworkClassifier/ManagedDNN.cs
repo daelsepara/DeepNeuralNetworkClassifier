@@ -23,6 +23,8 @@ namespace DeepLearnCS
         public double Cost;
         public double L2;
 
+        public bool UseL2;
+
         public int Iterations;
 
         Optimize Optimizer = new Optimize();
@@ -366,7 +368,7 @@ namespace DeepLearnCS
             Forward(input);
             BackPropagation(input);
 
-            var optimized = (double.IsNaN(opts.UseL2 ? L2 : Cost) || (opts.UseL2 ? L2 : Cost) < opts.Tolerance);
+            var optimized = (double.IsNaN(UseL2 ? L2 : Cost) || (UseL2 ? L2 : Cost) < opts.Tolerance);
 
             // Apply gradients only if the error is still high
             if (!optimized)
@@ -487,10 +489,11 @@ namespace DeepLearnCS
             Iterations = Optimizer.Iterations;
 
             Cost = Optimizer.f1;
+            L2 = Optimizer.f1;
 
             OptimizerInput = null;
 
-            return (double.IsNaN(opts.UseL2 ? L2 : Cost) || Iterations >= opts.Epochs || (opts.UseL2 ? L2 : Cost) < opts.Tolerance);
+            return (double.IsNaN(UseL2 ? L2 : Cost) || Iterations >= opts.Epochs || (UseL2 ? L2 : Cost) < opts.Tolerance);
         }
 
         public void Optimize(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)

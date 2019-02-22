@@ -604,7 +604,7 @@ public partial class MainWindow : Gtk.Window
         Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
         Options.HiddenLayers = Convert.ToInt32(HiddenLayers.Value, ci);
         Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
-        Options.UseL2 = UseL2.Active;
+        Network.UseL2 = UseL2.Active;
 
         if (UseOptimizer.Active)
         {

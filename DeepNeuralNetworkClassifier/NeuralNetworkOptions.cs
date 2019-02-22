@@ -10,7 +10,6 @@ namespace DeepLearnCS
         public int Categories;
         public double Tolerance;
         public int HiddenLayers;
-        public bool UseL2;
 
         public NeuralNetworkOptions(double alpha, int epochs, int categories, int inputs, int nodes, int items, double tolerance)
         {
