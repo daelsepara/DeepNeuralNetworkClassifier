@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <stetic-interface>
   <configuration>
     <images-root-path>..</images-root-path>
@@ -678,6 +678,7 @@
                     <property name="HasLabel">True</property>
                     <property name="UseUnderline">True</property>
                     <property name="FocusOnClick">False</property>
+                    <signal name="Toggled" handler="OnUseOptimizerToggled" />
                   </widget>
                   <packing>
                     <property name="X">450</property>
@@ -715,6 +716,7 @@
                     <property name="HasLabel">True</property>
                     <property name="UseUnderline">True</property>
                     <property name="FocusOnClick">False</property>
+                    <signal name="Toggled" handler="OnUseL2Toggled" />
                   </widget>
                   <packing>
                     <property name="X">450</property>

@@ -216,7 +216,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 500;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 0;
+		this.MainNotebook.CurrentPage = 1;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
@@ -941,6 +941,8 @@ public partial class MainWindow
 		this.ReloadTrainingDataButton.Clicked += new global::System.EventHandler(this.OnReloadTrainingDataButtonClicked);
 		this.OpenTestDataButton.Clicked += new global::System.EventHandler(this.OnOpenTestDataButtonClicked);
 		this.ReloadTestDataButton.Clicked += new global::System.EventHandler(this.OnReloadTestDataButtonClicked);
+		this.UseOptimizer.Toggled += new global::System.EventHandler(this.OnUseOptimizerToggled);
+		this.UseL2.Toggled += new global::System.EventHandler(this.OnUseL2Toggled);
 		this.OpenNetworkButton.Clicked += new global::System.EventHandler(this.OnOpenNetworkButtonClicked);
 		this.SaveNetworkButton.Clicked += new global::System.EventHandler(this.OnSaveNetworkButtonClicked);
 	}

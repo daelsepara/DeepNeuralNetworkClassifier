@@ -514,8 +514,6 @@ namespace DeepLearnCS
                     ManagedOps.Free(Weights[layer]);
                 }
             }
-
-            //Weights.Clear();
         }
     }
 }

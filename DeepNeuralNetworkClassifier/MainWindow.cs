@@ -932,4 +932,20 @@ public partial class MainWindow : Gtk.Window
     protected void OnSaveNetworkButtonClicked(object sender, EventArgs e)
     {
     }
+
+    protected void OnUseL2Toggled(object sender, EventArgs e)
+    {
+        if (UseL2.Active)
+        {
+            UseOptimizer.Active = false;
+        }
+    }
+
+    protected void OnUseOptimizerToggled(object sender, EventArgs e)
+    {
+        if (UseOptimizer.Active)
+        {
+            UseL2.Active = false;
+        }
+    }
 }
