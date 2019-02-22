@@ -117,7 +117,7 @@ namespace DeepLearnCS
 
             for (var i = 0; i < Y_true.Length(); i++)
             {
-                L2 += 0.5 * (D[last][i] * D[last][i]);
+                L2 += 0.5 * (D[0][i] * D[0][i]);
                 Cost += (-Y_true[i] * Math.Log(Y[i]) - (1 - Y_true[i]) * Math.Log(1 - Y[i]));
             }
 
