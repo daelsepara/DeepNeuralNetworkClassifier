@@ -488,9 +488,6 @@ namespace DeepLearnCS
 
             Iterations = Optimizer.Iterations;
 
-            Cost = Optimizer.f1;
-            L2 = Optimizer.f1;
-
             OptimizerInput = null;
 
             return (double.IsNaN(UseL2 ? L2 : Cost) || Iterations >= opts.Epochs || (UseL2 ? L2 : Cost) < opts.Tolerance);
