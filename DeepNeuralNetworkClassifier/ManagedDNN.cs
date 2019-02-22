@@ -462,7 +462,7 @@ namespace DeepLearnCS
 
             ClearDeltas();
 
-            return new FuncOutput(Cost, XX);
+            return new FuncOutput(UseL2 ? L2 : Cost, XX);
         }
 
         public void SetupOptimizer(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts, bool Reset = true)
