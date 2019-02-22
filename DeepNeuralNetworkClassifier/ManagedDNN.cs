@@ -364,7 +364,7 @@ namespace DeepLearnCS
             Forward(input);
             BackPropagation(input);
 
-            var optimized = (double.IsNaN(Cost) || Cost < opts.Tolerance);
+            var optimized = (double.IsNaN(opts.UseL2 ? L2 : Cost) || (opts.UseL2 ? L2 : Cost) < opts.Tolerance);
 
             // Apply gradients only if the error is still high
             if (!optimized)
