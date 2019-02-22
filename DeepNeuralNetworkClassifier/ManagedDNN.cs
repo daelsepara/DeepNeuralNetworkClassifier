@@ -283,8 +283,6 @@ namespace DeepLearnCS
                     }
                 }
 
-                Activations = new ManagedArray[opts.HiddenLayers];
-
                 if (D != null && D.GetLength(0) > 0)
                 {
                     for (var layer = 0; layer < D.GetLength(0); layer++)
@@ -292,8 +290,6 @@ namespace DeepLearnCS
                         ManagedOps.Free(D[layer]);
                     }
                 }
-
-                D = new ManagedArray[opts.HiddenLayers + 1];
 
                 if (Deltas != null && Deltas.GetLength(0) > 0)
                 {
@@ -303,8 +299,6 @@ namespace DeepLearnCS
                     }
                 }
 
-                Deltas = new ManagedArray[opts.HiddenLayers + 1];
-
                 if (X != null && X.GetLength(0) > 0)
                 {
                     for (var layer = 0; layer < X.GetLength(0); layer++)
@@ -313,8 +307,6 @@ namespace DeepLearnCS
                     }
                 }
 
-                X = new ManagedArray[opts.HiddenLayers + 1];
-
                 if (Z != null && Z.GetLength(0) > 0)
                 {
                     for (var layer = 0; layer < Z.GetLength(0); layer++)
@@ -322,8 +314,6 @@ namespace DeepLearnCS
                         ManagedOps.Free(Z[layer]);
                     }
                 }
-
-                Z = new ManagedArray[opts.HiddenLayers + 1];
 
                 if (Weights != null && Weights.GetLength(0) > 0)
                 {
@@ -344,6 +334,12 @@ namespace DeepLearnCS
 
                 Weights[opts.HiddenLayers] = (new ManagedArray(opts.Nodes + 1, opts.Categories));
             }
+
+            Activations = new ManagedArray[opts.HiddenLayers];
+            Deltas = new ManagedArray[opts.HiddenLayers + 1];
+            X = new ManagedArray[opts.HiddenLayers + 1];
+            D = new ManagedArray[opts.HiddenLayers + 1];
+            Z = new ManagedArray[opts.HiddenLayers + 1];
 
             SetupLabels(output, opts);
 

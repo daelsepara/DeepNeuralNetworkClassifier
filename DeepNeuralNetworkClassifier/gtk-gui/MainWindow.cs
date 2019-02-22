@@ -194,7 +194,7 @@ public partial class MainWindow
 		this.ClassifyButton = new global::Gtk.Action("ClassifyButton", global::Mono.Unix.Catalog.GetString("Classify"), global::Mono.Unix.Catalog.GetString("Classify test data using trained network parameters"), "gtk-media-play");
 		this.ClassifyButton.ShortLabel = global::Mono.Unix.Catalog.GetString("Classify");
 		w1.Add(this.ClassifyButton, null);
-		this.LoadNetworkButton = new global::Gtk.Action("LoadNetworkButton", null, global::Mono.Unix.Catalog.GetString("Load network parameters from saved file"), "gtk-properties");
+		this.LoadNetworkButton = new global::Gtk.Action("LoadNetworkButton", null, global::Mono.Unix.Catalog.GetString("Load parameters into network"), "gtk-properties");
 		w1.Add(this.LoadNetworkButton, null);
 		this.UIManager.InsertActionGroup(w1, 0);
 		this.AddAccelGroup(this.UIManager.AccelGroup);
@@ -803,7 +803,7 @@ public partial class MainWindow
 		this.LabelLoadNetworkWeights.UseMarkup = true;
 		this.LayoutPageNetwork.Add(this.LabelLoadNetworkWeights);
 		global::Gtk.Fixed.FixedChild w65 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LabelLoadNetworkWeights]));
-		w65.X = 90;
+		w65.X = 70;
 		w65.Y = 410;
 		// Container child LayoutPageNetwork.Gtk.Fixed+FixedChild
 		this.LabelNormalization = new global::Gtk.Label();
@@ -944,6 +944,7 @@ public partial class MainWindow
 		this.ReloadTestDataButton.Clicked += new global::System.EventHandler(this.OnReloadTestDataButtonClicked);
 		this.UseOptimizer.Toggled += new global::System.EventHandler(this.OnUseOptimizerToggled);
 		this.UseL2.Toggled += new global::System.EventHandler(this.OnUseL2Toggled);
+		this.HiddenLayerWeightSelector.Changed += new global::System.EventHandler(this.OnHiddenLayerWeightSelectorChanged);
 		this.OpenNetworkButton.Clicked += new global::System.EventHandler(this.OnOpenNetworkButtonClicked);
 		this.SaveNetworkButton.Clicked += new global::System.EventHandler(this.OnSaveNetworkButtonClicked);
 	}

@@ -14,13 +14,14 @@ public partial class MainWindow : Gtk.Window
 
     FileChooserDialog TextLoader, JsonLoader, JsonSaver, ImageSaver;
     string TrainingSetFileName, TestDataFileName;
-    string WeightsFileName;
+    string NetworkFileName;
 
     List<Delimiter> Delimiters = new List<Delimiter>();
 
     bool Paused = true;
     bool NetworkSetuped;
     bool NetworkLoaded;
+    bool WeightsLoaded;
 
     Mutex Processing = new Mutex();
 
@@ -33,8 +34,6 @@ public partial class MainWindow : Gtk.Window
     ManagedArray OutputData = new ManagedArray();
     ManagedArray TestData = new ManagedArray();
     ManagedArray NormalizationData = new ManagedArray();
-
-    string FileName, FileNetwork;
 
     enum Pages
     {
@@ -310,6 +309,94 @@ public partial class MainWindow : Gtk.Window
         TextLoader.Hide();
     }
 
+    protected void LoadJson(ref string FileName, string title, Entry entry)
+    {
+        JsonLoader.Title = title;
+
+        // Add most recent directory
+        if (!string.IsNullOrEmpty(JsonLoader.Filename))
+        {
+            var directory = System.IO.Path.GetDirectoryName(JsonLoader.Filename);
+
+            if (Directory.Exists(directory))
+            {
+                JsonLoader.SetCurrentFolder(directory);
+            }
+        }
+
+        if (JsonLoader.Run() == (int)ResponseType.Accept)
+        {
+            if (!string.IsNullOrEmpty(JsonLoader.Filename))
+            {
+                FileName = JsonLoader.Filename;
+
+                if (entry != null)
+                {
+                    entry.Text = FileName;
+                }
+            }
+        }
+
+        JsonLoader.Hide();
+    }
+
+    protected void SaveJson(ref string FileName, string title, Entry entry, string data)
+    {
+        JsonSaver.Title = title;
+
+        JsonSaver.SelectFilename(FileName);
+
+        string directory;
+
+        // Add most recent directory
+        if (!string.IsNullOrEmpty(JsonSaver.Filename))
+        {
+            directory = System.IO.Path.GetDirectoryName(JsonSaver.Filename);
+
+            if (Directory.Exists(directory))
+            {
+                JsonSaver.SetCurrentFolder(directory);
+            }
+        }
+
+        if (JsonSaver.Run() == (int)ResponseType.Accept)
+        {
+            if (!string.IsNullOrEmpty(JsonSaver.Filename))
+            {
+                FileName = JsonSaver.Filename;
+
+                directory = GetDirectory(FileName);
+
+                var ext = JsonSaver.Filter.Name;
+
+                FileName = String.Format("{0}.{1}", GetBaseFileName(FileName), ext);
+
+                if (!string.IsNullOrEmpty(data))
+                {
+                    var fullpath = String.Format("{0}/{1}", directory, FileName);
+
+                    try
+                    {
+                        using (var file = new StreamWriter(fullpath, false))
+                        {
+                            file.Write(data);
+                        }
+
+                        FileName = fullpath;
+
+                        entry.Text = FileName;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error saving {0}: {1}", FileName, ex.Message);
+                    }
+                }
+            }
+        }
+
+        JsonSaver.Hide();
+    }
+
     protected void UpdateDelimiterBox(ComboBox combo, List<Delimiter> delimeters)
     {
         combo.Clear();
@@ -385,11 +472,64 @@ public partial class MainWindow : Gtk.Window
         }
     }
 
+    protected void UpdateHiddenLayerWeightsSelector(ComboBox combo, ManagedArray[] Weights)
+    {
+        if (Weights != null)
+        {
+            combo.Clear();
+
+            var cell = new CellRendererText();
+            combo.PackStart(cell, false);
+            combo.AddAttribute(cell, "text", 0);
+            var store = new ListStore(typeof(string));
+            combo.Model = store;
+
+            for (var layer = 0; layer < Weights.GetLength(0) - 1; layer++)
+            {
+                store.AppendValues(string.Format("Hidden layer {0}", layer + 1));
+            }
+
+            combo.Active = Weights.GetLength(0) > 0 ? 0 : -1;
+        }
+    }
+
+    protected void UpdateHiddenLayerWeights(ManagedArray[] Weights)
+    {
+        if (Weights != null & Weights.GetLength(0) > 1)
+        {
+            var current = HiddenLayerWeightSelector.Active;
+
+            if (current >= 0 && current < Weights.GetLength(0))
+            {
+                UpdateTextView(ViewHiddenLayerWeights, Weights[current]);
+            }
+        }
+    }
+
+    protected void UpdateOutputLayerWeights(ManagedArray[] Weights)
+    {
+        if (Weights != null & Weights.GetLength(0) > 1)
+        {
+            UpdateTextView(ViewOutputLayerWeights, Weights[Weights.GetLength(0) - 1]);
+        }
+    }
+
+    protected void UpdateNetworkWeights()
+    {
+        if (NetworkSetuped)
+        {
+            UpdateHiddenLayerWeightsSelector(HiddenLayerWeightSelector, Network.Weights);
+            UpdateHiddenLayerWeights(Network.Weights);
+            UpdateOutputLayerWeights(Network.Weights);
+        }
+    }
+
     protected void UpdateClassifierInfo()
     {
         if (NetworkSetuped)
         {
             Iterations.Text = Network.Iterations.ToString(ci);
+
             ErrorCost.Text = Network.Cost.ToString("0.#####e+00", ci);
             L2.Text = Network.L2.ToString("0.#####e+00", ci);
         }
@@ -526,8 +666,6 @@ public partial class MainWindow : Gtk.Window
 
         NormalizeData(InputData, NormalizationData);
 
-        UpdateTextView(ViewNormalization, NormalizationData);
-
         return true;
     }
 
@@ -579,6 +717,8 @@ public partial class MainWindow : Gtk.Window
 
         NormalizeData(TestData, NormalizationData);
 
+        UpdateTextView(ViewNormalization, NormalizationData);
+
         return true;
     }
 
@@ -618,39 +758,47 @@ public partial class MainWindow : Gtk.Window
         ViewTrainingData.Buffer.Text = training;
     }
 
-    protected void SetupNetworkWeights()
-    {
-
-    }
-
     protected void SetupNetwork()
     {
         NetworkSetuped = false;
 
-        // Reset Network
-        Network.Free();
+        if (WeightsLoaded)
+        {
+            Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) / 100;
+            Options.Epochs = Convert.ToInt32(Epochs.Value, ci);
+            Options.Inputs = Convert.ToInt32(InputLayerNodes.Value, ci);
+            Options.Categories = Convert.ToInt32(Categories.Value, ci);
+            Options.Items = InputData.y;
+            Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
+            Options.HiddenLayers = Convert.ToInt32(HiddenLayers.Value, ci);
+            Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
 
-        Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) / 100;
-        Options.Epochs = Convert.ToInt32(Epochs.Value, ci);
-        Options.Inputs = Convert.ToInt32(InputLayerNodes.Value, ci);
-        Options.Categories = Convert.ToInt32(Categories.Value, ci);
-        Options.Items = InputData.y;
-        Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
-        Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
+            NetworkLoaded = WeightsLoaded;
 
-        TrainingDone = false;
+            if (UseOptimizer.Active)
+            {
+                Network.SetupOptimizer(InputData, OutputData, Options, false);
+            }
+            else
+            {
+                Network.Setup(OutputData, Options, false);
+            }
 
-        CurrentEpoch = 0;
+            NetworkSetuped = true;
+            TrainingDone = true;
 
-        Iterations.Text = "";
-        ErrorCost.Text = "";
-        L2.Text = "";
-        ProgressBar.Text = "";
+            CurrentEpoch = 0;
 
-        TrainingDone = false;
-        UseOptimizer.Sensitive = true;
-        UseL2.Sensitive = true;
-        Epochs.Sensitive = true;
+            Iterations.Text = "";
+            ErrorCost.Text = "";
+            L2.Text = "";
+            ProgressBar.Text = "";
+
+            TrainingDone = false;
+            UseOptimizer.Sensitive = true;
+            UseL2.Sensitive = true;
+            Epochs.Sensitive = true;
+        }
     }
 
     protected void UpdateTextView(TextView view, ManagedArray data)
@@ -752,7 +900,7 @@ public partial class MainWindow : Gtk.Window
             {
                 var Epoch = Convert.ToInt32(Epochs.Value, ci);
 
-                //UpdateNetworkWeights();
+                UpdateNetworkWeights();
 
                 CurrentEpoch = Epoch;
 
@@ -850,11 +998,11 @@ public partial class MainWindow : Gtk.Window
 
         if (TrainingDone)
         {
-            TrainingDone = false;
-
             NetworkSetuped = false || NetworkLoaded;
 
             CurrentEpoch = 0;
+
+            Epochs.Sensitive = !NetworkLoaded;
         }
 
         if (!NetworkSetuped)
@@ -923,14 +1071,66 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnLoadNetworkButtonClicked(object sender, EventArgs e)
     {
+        if (!Paused)
+            return;
+
+        SetupNetwork();
     }
 
     protected void OnOpenNetworkButtonClicked(object sender, EventArgs e)
     {
+        if (!Paused)
+            return;
+
+        LoadJson(ref NetworkFileName, "Load network model", FilenameNetwork);
+
+        Network.Free();
+
+        Network = Utility.LoadDNN(GetDirectory(NetworkFileName), GetBaseFileName(NetworkFileName), NormalizationData);
+
+        if (Network != null)
+        {
+            if (Network.Weights != null && Network.Weights.GetLength(0) > 1)
+            {
+                if (Network.Weights[0].x > 0)
+                    InputLayerNodes.Value = Network.Weights[0].x - 1;
+
+                if (Network.Weights[0].y > 0)
+                    HiddenLayerNodes.Value = Network.Weights[0].y;
+
+                HiddenLayers.Value = Network.Weights.GetLength(0);
+
+                if (Network.Weights[Network.Weights.GetLength(0) - 1].y > 0)
+                    Categories.Value = Network.Weights[Network.Weights.GetLength(0) - 1].y;
+
+                UpdateHiddenLayerWeightsSelector(HiddenLayerWeightSelector, Network.Weights);
+                UpdateHiddenLayerWeights(Network.Weights);
+                UpdateOutputLayerWeights(Network.Weights);
+
+                if (NormalizationData != null)
+                    UpdateTextView(ViewNormalization, NormalizationData);
+
+                WeightsLoaded = true;
+                TrainingDone = true;
+            }
+        }
+        else
+        {
+            Network = new ManagedDNN();
+        }
     }
 
     protected void OnSaveNetworkButtonClicked(object sender, EventArgs e)
     {
+        if (!Paused)
+            return;
+
+        if (NetworkSetuped)
+        {
+            var json = Utility.Serialize(Network, NormalizationData);
+
+            SaveJson(ref NetworkFileName, "Save network model", FilenameNetwork, json);
+        }
     }
 
     protected void OnUseL2Toggled(object sender, EventArgs e)
@@ -947,5 +1147,13 @@ public partial class MainWindow : Gtk.Window
         {
             UseL2.Active = false;
         }
+    }
+
+    protected void OnHiddenLayerWeightSelectorChanged(object sender, EventArgs e)
+    {
+        if (!Paused || (!NetworkSetuped && !WeightsLoaded))
+            return;
+
+        UpdateHiddenLayerWeights(Network.Weights);
     }
 }

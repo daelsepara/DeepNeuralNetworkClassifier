@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <stetic-interface>
   <configuration>
     <images-root-path>..</images-root-path>
@@ -78,7 +78,7 @@
             <property name="WidthRequest">740</property>
             <property name="HeightRequest">500</property>
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">0</property>
+            <property name="CurrentPage">2</property>
             <signal name="SwitchPage" handler="OnMainNotebookSwitchPage" />
             <child>
               <widget class="Gtk.Fixed" id="LayoutPageData">
@@ -759,6 +759,7 @@
                     <property name="WidthRequest">300</property>
                     <property name="IsTextCombo">True</property>
                     <property name="Items" translatable="yes" />
+                    <signal name="Changed" handler="OnHiddenLayerWeightSelectorChanged" />
                   </widget>
                   <packing>
                     <property name="X">30</property>
