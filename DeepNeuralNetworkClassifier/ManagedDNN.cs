@@ -15,6 +15,10 @@ namespace DeepLearnCS
         public List<ManagedArray> X = new List<ManagedArray>();
         public List<ManagedArray> Z = new List<ManagedArray>();
 
+        // internal use
+        private List<ManagedArray> Activations = new List<ManagedArray>();
+        private List<ManagedArray> D = new List<ManagedArray>();
+
         // Error
         public double Cost;
         public double L2;
@@ -24,8 +28,6 @@ namespace DeepLearnCS
         // Forward Propagation
         public void Forward(ManagedArray input)
         {
-            var Activations = new List<ManagedArray>();
-
             // create bias column
             var InputBias = new ManagedArray(1, input.y);
             ManagedOps.Set(InputBias, 1.0);
@@ -72,8 +74,6 @@ namespace DeepLearnCS
         // Backward propagation
         public void BackPropagation(ManagedArray input)
         {
-            var D = new List<ManagedArray>();
-
             var last = Weights.Count - 1;
 
             D.Add(ManagedMatrix.Diff(Y, Y_true));
