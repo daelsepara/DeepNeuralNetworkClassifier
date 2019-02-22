@@ -35,7 +35,7 @@ namespace DeepLearnCS
         public void Forward(ManagedArray input)
         {
             // create bias column
-            var InputBias = new ManagedArray(1, input.y);
+            var InputBias = new ManagedArray(1, input.y, false);
             ManagedOps.Set(InputBias, 1.0);
 
             // Compute input activations
@@ -90,10 +90,10 @@ namespace DeepLearnCS
             {
                 var prev = current - 1;
 
-                var W = new ManagedArray(Weights[layer + 1].x - 1, Weights[layer + 1].y);
+                var W = new ManagedArray(Weights[layer + 1].x - 1, Weights[layer + 1].y, false);
                 var DZ = ManagedMatrix.DSigm(Z[layer]);
 
-                D[current] = (new ManagedArray(W.x, D[prev].y));
+                D[current] = (new ManagedArray(W.x, D[prev].y, false));
 
                 ManagedOps.Copy2D(W, Weights[layer + 1], 1, 0);
                 ManagedMatrix.Multiply(D[current], D[prev], W);
@@ -108,7 +108,7 @@ namespace DeepLearnCS
             {
                 var tD = ManagedMatrix.Transpose(D[Weights.GetLength(0) - layer - 1]);
 
-                Deltas[layer] = (new ManagedArray(Weights[layer].x, Weights[layer].y));
+                Deltas[layer] = (new ManagedArray(Weights[layer].x, Weights[layer].y, false));
 
                 ManagedMatrix.Multiply(Deltas[layer], tD, X[layer]);
                 ManagedMatrix.Multiply(Deltas[layer], 1.0 / input.y);
@@ -168,7 +168,7 @@ namespace DeepLearnCS
 
         ManagedArray Labels(ManagedArray output, NeuralNetworkOptions opts)
         {
-            var result = new ManagedArray(opts.Categories, opts.Items);
+            var result = new ManagedArray(opts.Categories, opts.Items, false);
             var eye_matrix = ManagedMatrix.Diag(opts.Categories);
 
             for (var y = 0; y < opts.Items; y++)
