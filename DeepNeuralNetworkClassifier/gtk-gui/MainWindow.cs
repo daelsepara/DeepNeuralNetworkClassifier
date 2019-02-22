@@ -214,7 +214,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 500;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 0;
+		this.MainNotebook.CurrentPage = 1;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
@@ -673,7 +673,6 @@ public partial class MainWindow
 		w51.Y = 310;
 		// Container child LayoutPageTraining.Gtk.Fixed+FixedChild
 		this.UseOptimizer = new global::Gtk.CheckButton();
-		this.UseOptimizer.Sensitive = false;
 		this.UseOptimizer.Name = "UseOptimizer";
 		this.UseOptimizer.Label = global::Mono.Unix.Catalog.GetString("Use optimizer");
 		this.UseOptimizer.DrawIndicator = true;

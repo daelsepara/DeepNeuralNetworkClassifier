@@ -607,7 +607,7 @@ public partial class MainWindow : Gtk.Window
 
         if (UseOptimizer.Active)
         {
-            //Network.SetupOptimizer(InputData, OutputData, Options, true);
+            Network.SetupOptimizer(InputData, OutputData, Options, true);
         }
         else
         {
@@ -742,9 +742,7 @@ public partial class MainWindow : Gtk.Window
 
         if (!Paused && NetworkSetuped)
         {
-            //var result = UseOptimizer.Active ? Network.StepOptimizer(InputData, Options) : Network.Step(InputData, Options);
-
-            var result = Network.Step(InputData, Options);
+            var result = UseOptimizer.Active ? Network.StepOptimizer(InputData, Options) : Network.Step(InputData, Options);
 
             CurrentEpoch = Network.Iterations;
 
@@ -904,7 +902,7 @@ public partial class MainWindow : Gtk.Window
 
         TrainingDone = false;
 
-        //UseOptimizer.Sensitive = true;
+        UseOptimizer.Sensitive = true;
         Epochs.Sensitive = true;
 
         ProgressBar.Text = "";

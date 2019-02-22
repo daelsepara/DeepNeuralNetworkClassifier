@@ -25,6 +25,8 @@ namespace DeepLearnCS
 
         public int Iterations;
 
+        Optimize Optimizer = new Optimize();
+
         // Forward Propagation
         public void Forward(ManagedArray input)
         {
@@ -384,6 +386,118 @@ namespace DeepLearnCS
             Setup(output, opts);
 
             while (!Step(input, opts)) { }
+        }
+
+        // Reshape Network Weights for use in optimizer
+        public double[] ReshapeWeights(ManagedArray[] A)
+        {
+            var size = 0;
+
+            if (A != null && A.GetLength(0) > 0)
+            {
+                for (var layer = 0; layer < A.GetLength(0); layer++)
+                {
+                    size += A[layer].x * A[layer].y;
+                }
+            }
+
+            var XX = new double[size];
+
+            if (A != null && A.GetLength(0) > 0)
+            {
+                var index = 0;
+
+                for (var layer = 0; layer < A.GetLength(0); layer++)
+                {
+                    for (var x = 0; x < A[layer].x; x++)
+                    {
+                        for (var y = 0; y < A[layer].y; y++)
+                        {
+                            XX[index] = A[layer][x, y];
+
+                            index++;
+                        }
+                    }
+                }
+            }
+
+            return XX;
+        }
+
+        // Transform vector back into Network Weights
+        public void ReshapeWeights(double[] XX, ManagedArray[] A)
+        {
+            var index = 0;
+
+            for (var layer = 0; layer < A.GetLength(0); layer++)
+            {
+                for (var x = 0; x < A[layer].x; x++)
+                {
+                    for (var y = 0; y < A[layer].y; y++)
+                    {
+                        if (index < XX.Length)
+                            A[layer][x, y] = XX[index];
+
+                        index++;
+                    }
+                }
+            }
+        }
+
+        ManagedArray OptimizerInput;
+
+        public FuncOutput OptimizerCost(double[] XX)
+        {
+            ReshapeWeights(XX, Weights);
+
+            if (OptimizerInput != null)
+                Forward(OptimizerInput);
+
+            if (OptimizerInput != null)
+                BackPropagation(OptimizerInput);
+
+            XX = ReshapeWeights(Deltas);
+
+            ClearDeltas();
+
+            return new FuncOutput(Cost, XX);
+        }
+
+        public void SetupOptimizer(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts, bool Reset = true)
+        {
+            Setup(output, opts, Reset);
+
+            Optimizer.MaxIterations = opts.Epochs;
+
+            var XX = ReshapeWeights(Weights);
+
+            OptimizerInput = input;
+
+            Optimizer.Setup(OptimizerCost, XX);
+        }
+
+        public bool StepOptimizer(ManagedArray input, NeuralNetworkOptions opts)
+        {
+            OptimizerInput = input;
+
+            var XX = ReshapeWeights(Weights);
+
+            Optimizer.Step(OptimizerCost, XX);
+
+            Iterations = Optimizer.Iterations;
+
+            Cost = Optimizer.f1;
+
+            OptimizerInput = null;
+
+            return (double.IsNaN(opts.UseL2 ? L2 : Cost) || Iterations >= opts.Epochs || (opts.UseL2 ? L2 : Cost) < opts.Tolerance);
+        }
+
+        public void Optimize(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
+        {
+            SetupOptimizer(input, output, opts);
+
+            while (!StepOptimizer(input, opts)) { }
         }
 
         public void Free()
