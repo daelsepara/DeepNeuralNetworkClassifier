@@ -462,7 +462,7 @@ namespace DeepLearnCS
 
             ClearDeltas();
 
-            return new FuncOutput(UseL2 ? L2 : Cost, XX);
+            return new FuncOutput(Cost, XX);
         }
 
         public void SetupOptimizer(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts, bool Reset = true)
@@ -488,18 +488,11 @@ namespace DeepLearnCS
 
             Iterations = Optimizer.Iterations;
 
-            if (UseL2)
-            {
-                L2 = Optimizer.f1;
-            }
-            else
-            {
-                Cost = Optimizer.f1;
-            }
+            Cost = Optimizer.f1;
 
             OptimizerInput = null;
 
-            return (double.IsNaN(UseL2 ? L2 : Cost) || Iterations >= opts.Epochs || (UseL2 ? L2 : Cost) < opts.Tolerance);
+            return (double.IsNaN(Cost) || Iterations >= opts.Epochs || (Cost) < opts.Tolerance);
         }
 
         public void Optimize(ManagedArray input, ManagedArray output, NeuralNetworkOptions opts)
