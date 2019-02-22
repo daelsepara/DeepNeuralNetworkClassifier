@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <stetic-interface>
   <configuration>
     <images-root-path>..</images-root-path>
@@ -681,7 +681,30 @@
                   </widget>
                   <packing>
                     <property name="X">450</property>
+                    <property name="Y">220</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelL2">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;L2 Error&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
                     <property name="Y">150</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="L2">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">140</property>
+                    <property name="IsEditable">False</property>
+                    <property name="InvisibleChar">•</property>
+                  </widget>
+                  <packing>
+                    <property name="X">450</property>
+                    <property name="Y">180</property>
                   </packing>
                 </child>
               </widget>

@@ -5,19 +5,25 @@ namespace DeepLearnCS
 {
     public class ManagedDNN
     {
-        public List<ManagedArray> Weights = new List<ManagedArray>();
-        public List<ManagedArray> Deltas = new List<ManagedArray>();
+        //public List<ManagedArray> Weights = new List<ManagedArray>();
+        //public List<ManagedArray> Deltas = new List<ManagedArray>();
+        public ManagedArray[] Weights;
+        public ManagedArray[] Deltas;
 
         public ManagedArray Y;
         public ManagedArray Y_true;
 
         // intermediate results
-        public List<ManagedArray> X = new List<ManagedArray>();
-        public List<ManagedArray> Z = new List<ManagedArray>();
+        //public List<ManagedArray> X = new List<ManagedArray>();
+        //public List<ManagedArray> Z = new List<ManagedArray>();
+        public ManagedArray[] X;
+        public ManagedArray[] Z;
 
         // internal use
-        private List<ManagedArray> Activations = new List<ManagedArray>();
-        private List<ManagedArray> D = new List<ManagedArray>();
+        //private List<ManagedArray> Activations = new List<ManagedArray>();
+        //private List<ManagedArray> D = new List<ManagedArray>();
+        private ManagedArray[] Activations;
+        private ManagedArray[] D;
 
         // Error
         public double Cost;
@@ -33,22 +39,22 @@ namespace DeepLearnCS
             ManagedOps.Set(InputBias, 1.0);
 
             // Compute input activations
-            var last = Weights.Count - 1;
+            var last = Weights.GetLength(0) - 1;
 
-            for (var layer = 0; layer < Weights.Count; layer++)
+            for (var layer = 0; layer < Weights.GetLength(0); layer++)
             {
                 var XX = layer == 0 ? ManagedMatrix.CBind(InputBias, input) : ManagedMatrix.CBind(InputBias, Activations[layer - 1]);
                 var tW = ManagedMatrix.Transpose(Weights[layer]);
                 var ZZ = ManagedMatrix.Multiply(XX, tW);
 
-                X.Add(XX);
-                Z.Add(ZZ);
+                X[layer] = XX;
+                Z[layer] = ZZ;
 
                 if (layer != last)
                 {
                     var SS = ManagedMatrix.Sigm(ZZ);
 
-                    Activations.Add(SS);
+                    Activations[layer] = SS;
                 }
                 else
                 {
@@ -61,12 +67,12 @@ namespace DeepLearnCS
             }
 
             // Cleanup
-            for (var layer = 0; layer < Activations.Count; layer++)
+            for (var layer = 0; layer < Activations.GetLength(0); layer++)
             {
                 ManagedOps.Free(Activations[layer]);
             }
 
-            Activations.Clear();
+            //Activations.Clear();
 
             ManagedOps.Free(InputBias);
         }
@@ -74,32 +80,35 @@ namespace DeepLearnCS
         // Backward propagation
         public void BackPropagation(ManagedArray input)
         {
-            var last = Weights.Count - 1;
+            var last = Weights.GetLength(0) - 1;
 
-            D.Add(ManagedMatrix.Diff(Y, Y_true));
+            D[0] = ManagedMatrix.Diff(Y, Y_true);
+
+            var current = 1;
 
             for (var layer = last - 1; layer >= 0; layer--)
             {
-                var current = D.Count;
-                var prev = D.Count - 1;
+                var prev = current - 1;
 
                 var W = new ManagedArray(Weights[layer + 1].x - 1, Weights[layer + 1].y);
                 var DZ = ManagedMatrix.DSigm(Z[layer]);
 
-                D.Add(new ManagedArray(W.x, D[prev].y));
+                D[current] = (new ManagedArray(W.x, D[prev].y));
 
                 ManagedOps.Copy2D(W, Weights[layer + 1], 1, 0);
                 ManagedMatrix.Multiply(D[current], D[prev], W);
                 ManagedMatrix.Product(D[current], DZ);
 
                 ManagedOps.Free(W, DZ);
+
+                current++;
             }
 
-            for (var layer = 0; layer < Weights.Count; layer++)
+            for (var layer = 0; layer < Weights.GetLength(0); layer++)
             {
-                var tD = ManagedMatrix.Transpose(D[Weights.Count - layer - 1]);
+                var tD = ManagedMatrix.Transpose(D[Weights.GetLength(0) - layer - 1]);
 
-                Deltas.Add(new ManagedArray(Weights[layer].x, Weights[layer].y));
+                Deltas[layer] = (new ManagedArray(Weights[layer].x, Weights[layer].y));
 
                 ManagedMatrix.Multiply(Deltas[layer], tD, X[layer]);
                 ManagedMatrix.Multiply(Deltas[layer], 1.0 / input.y);
@@ -120,30 +129,30 @@ namespace DeepLearnCS
             L2 /= input.y;
 
             // Cleanup
-            for (var layer = 0; layer < Weights.Count; layer++)
+            for (var layer = 0; layer < Weights.GetLength(0); layer++)
             {
                 ManagedOps.Free(D[layer], X[layer], Z[layer]);
             }
 
-            D.Clear();
-            X.Clear();
-            Z.Clear();
+            //D.Clear();
+            //X.Clear();
+            //Z.Clear();
         }
 
         public void ClearDeltas()
         {
-            for (var layer = 0; layer < Weights.Count; layer++)
+            for (var layer = 0; layer < Weights.GetLength(0); layer++)
             {
                 // cleanup of arrays allocated in BackPropagation
                 ManagedOps.Free(Deltas[layer]);
             }
 
-            Deltas.Clear();
+            //Deltas.Clear();
         }
 
         public void ApplyGradients(NeuralNetworkOptions opts)
         {
-            for (var layer = 0; layer < Weights.Count; layer++)
+            for (var layer = 0; layer < Weights.GetLength(0); layer++)
             {
                 ManagedMatrix.Add(Weights[layer], Deltas[layer], -opts.Alpha);
             }
@@ -216,13 +225,13 @@ namespace DeepLearnCS
             ManagedOps.Free(Y);
 
             // Cleanup
-            for (var layer = 0; layer < Weights.Count; layer++)
+            for (var layer = 0; layer < Weights.GetLength(0); layer++)
             {
                 ManagedOps.Free(X[layer], Z[layer]);
             }
 
-            X.Clear();
-            Z.Clear();
+            //X.Clear();
+            //Z.Clear();
 
             return prediction;
         }
@@ -262,13 +271,13 @@ namespace DeepLearnCS
             // cleanup of arrays allocated in Forward propagation
             ManagedOps.Free(Y);
 
-            for (var layer = 0; layer < Weights.Count; layer++)
+            for (var layer = 0; layer < Weights.GetLength(0); layer++)
             {
                 ManagedOps.Free(X[layer], Z[layer]);
             }
 
-            X.Clear();
-            Z.Clear();
+            //X.Clear();
+            //Z.Clear();
 
             return classification;
         }
@@ -282,27 +291,82 @@ namespace DeepLearnCS
         {
             if (Reset)
             {
-                if (Weights.Count > 0)
+                if (Activations != null && Activations.GetLength(0) > 0)
                 {
-                    for (var layer = 0; layer < Weights.Count; layer++)
+                    for (var layer = 0; layer < Activations.GetLength(0); layer++)
+                    {
+                        ManagedOps.Free(Activations[layer]);
+                    }
+                }
+
+                Activations = new ManagedArray[opts.HiddenLayers];
+
+                if (D != null && D.GetLength(0) > 0)
+                {
+                    for (var layer = 0; layer < D.GetLength(0); layer++)
+                    {
+                        ManagedOps.Free(D[layer]);
+                    }
+                }
+
+                D = new ManagedArray[opts.HiddenLayers + 1];
+
+                if (Deltas != null && Deltas.GetLength(0) > 0)
+                {
+                    for (var layer = 0; layer < Deltas.GetLength(0); layer++)
+                    {
+                        ManagedOps.Free(Deltas[layer]);
+                    }
+                }
+
+                Deltas = new ManagedArray[opts.HiddenLayers + 1];
+
+                if (X != null && X.GetLength(0) > 0)
+                {
+                    for (var layer = 0; layer < X.GetLength(0); layer++)
+                    {
+                        ManagedOps.Free(X[layer]);
+                    }
+                }
+
+                X = new ManagedArray[opts.HiddenLayers + 1];
+
+                if (Z != null && Z.GetLength(0) > 0)
+                {
+                    for (var layer = 0; layer < Z.GetLength(0); layer++)
+                    {
+                        ManagedOps.Free(Z[layer]);
+                    }
+                }
+
+                Z = new ManagedArray[opts.HiddenLayers + 1];
+
+                if (Weights != null && Weights.GetLength(0) > 0)
+                {
+                    for (var layer = 0; layer < Weights.GetLength(0); layer++)
                     {
                         ManagedOps.Free(Weights[layer]);
                     }
 
-                    Weights.Clear();
+                    //Weights.Clear();
                 }
 
+                Weights = new ManagedArray[opts.HiddenLayers + 1];
+                Weights[0] = new ManagedArray(opts.Inputs + 1, opts.Nodes);
+
+                /*
                 Weights = new List<ManagedArray>
                 {
                     new ManagedArray(opts.Inputs + 1, opts.Nodes)
                 };
+                */
 
                 for (var layer = 1; layer < opts.HiddenLayers; layer++)
                 {
-                    Weights.Add(new ManagedArray(opts.Nodes + 1, opts.Nodes));
+                    Weights[layer] = (new ManagedArray(opts.Nodes + 1, opts.Nodes));
                 }
 
-                Weights.Add(new ManagedArray(opts.Nodes + 1, opts.Categories));
+                Weights[opts.HiddenLayers] = (new ManagedArray(opts.Nodes + 1, opts.Categories));
             }
 
             SetupLabels(output, opts);
@@ -355,12 +419,15 @@ namespace DeepLearnCS
             ManagedOps.Free(Y);
             ManagedOps.Free(Y_true);
 
-            for (var layer = 0; layer < Weights.Count; layer++)
+            if (Weights != null)
             {
-                ManagedOps.Free(Weights[layer]);
+                for (var layer = 0; layer < Weights.GetLength(0); layer++)
+                {
+                    ManagedOps.Free(Weights[layer]);
+                }
             }
 
-            Weights.Clear();
+            //Weights.Clear();
         }
     }
 }

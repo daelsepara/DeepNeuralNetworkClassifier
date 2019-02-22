@@ -176,6 +176,8 @@ public partial class MainWindow : Gtk.Window
 
         HiddenLayerWeightSelector.Sensitive = toggle;
         ViewHiddenLayerWeights.Sensitive = toggle;
+        ViewOutputLayerWeights.Sensitive = toggle;
+        ViewNormalization.Sensitive = toggle;
         OpenNetworkButton.Sensitive = toggle;
         SaveNetworkButton.Sensitive = toggle;
         FilenameNetwork.Sensitive = toggle;
@@ -388,7 +390,8 @@ public partial class MainWindow : Gtk.Window
         if (NetworkSetuped)
         {
             Iterations.Text = Network.Iterations.ToString(ci);
-            ErrorCost.Text = Network.L2.ToString("0.#####e+00", ci);
+            ErrorCost.Text = Network.Cost.ToString("0.#####e+00", ci);
+            L2.Text = Network.L2.ToString("0.#####e+00", ci);
         }
     }
 
@@ -640,6 +643,7 @@ public partial class MainWindow : Gtk.Window
 
         Iterations.Text = "";
         ErrorCost.Text = "";
+        L2.Text = "";
         ProgressBar.Text = "";
 
         TrainingDone = false;
@@ -892,6 +896,7 @@ public partial class MainWindow : Gtk.Window
 
         Iterations.Text = "";
         ErrorCost.Text = "";
+        L2.Text = "";
 
         NetworkSetuped = false;
 

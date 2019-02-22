@@ -40,7 +40,7 @@ namespace DeepLearnCS
         {
             var model = new ManagedDNNJSON();
 
-            for (var layer = 0; layer < network.Weights.Count; layer++)
+            for (var layer = 0; layer < network.Weights.GetLength(0); layer++)
             {
                 model.Weights.Add(Convert2D(network.Weights[layer]));
             }
@@ -63,9 +63,11 @@ namespace DeepLearnCS
 
             var network = new ManagedDNN();
 
+            network.Weights = new ManagedArray[model.Weights.Count];
+
             for (var layer = 0; layer < model.Weights.Count; layer++)
             {
-                //network.Weights.Add(Set(model.Weights[layer]));
+                network.Weights[layer] = (Set(model.Weights[layer]));
             }
 
             return network;
