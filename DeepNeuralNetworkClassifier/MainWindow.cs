@@ -998,6 +998,8 @@ public partial class MainWindow : Gtk.Window
 
         if (TrainingDone)
         {
+            TrainingDone = false && !NetworkLoaded;
+
             NetworkSetuped = false || NetworkLoaded;
 
             CurrentEpoch = 0;
@@ -1098,7 +1100,7 @@ public partial class MainWindow : Gtk.Window
                 if (Network.Weights[0].y > 0)
                     HiddenLayerNodes.Value = Network.Weights[0].y;
 
-                HiddenLayers.Value = Network.Weights.GetLength(0);
+                HiddenLayers.Value = Network.Weights.GetLength(0) - 1;
 
                 if (Network.Weights[Network.Weights.GetLength(0) - 1].y > 0)
                     Categories.Value = Network.Weights[Network.Weights.GetLength(0) - 1].y;
