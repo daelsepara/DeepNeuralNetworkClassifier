@@ -552,6 +552,7 @@ public partial class MainWindow
 		this.TrainingToolbar = ((global::Gtk.Toolbar)(this.UIManager.GetWidget("/TrainingToolbar")));
 		this.TrainingToolbar.Name = "TrainingToolbar";
 		this.TrainingToolbar.ShowArrow = false;
+		this.TrainingToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
 		this.LayoutPageTraining.Add(this.TrainingToolbar);
 		global::Gtk.Fixed.FixedChild w39 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageTraining[this.TrainingToolbar]));
 		w39.X = 220;
