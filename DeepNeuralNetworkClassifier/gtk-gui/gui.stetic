@@ -55,6 +55,7 @@
         <property name="Type">Action</property>
         <property name="Label" translatable="yes" />
         <property name="StockId">gtk-properties</property>
+        <property name="Tooltip" translatable="yes">Load parameters into network</property>
         <signal name="Activated" handler="OnLoadNetworkButtonClicked" />
       </action>
     </action-group>

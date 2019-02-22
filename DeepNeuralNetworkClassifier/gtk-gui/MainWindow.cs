@@ -194,7 +194,7 @@ public partial class MainWindow
 		this.ClassifyButton = new global::Gtk.Action("ClassifyButton", global::Mono.Unix.Catalog.GetString("Classify"), global::Mono.Unix.Catalog.GetString("Classify test data using trained network parameters"), "gtk-media-play");
 		this.ClassifyButton.ShortLabel = global::Mono.Unix.Catalog.GetString("Classify");
 		w1.Add(this.ClassifyButton, null);
-		this.LoadNetworkButton = new global::Gtk.Action("LoadNetworkButton", null, null, "gtk-properties");
+		this.LoadNetworkButton = new global::Gtk.Action("LoadNetworkButton", null, global::Mono.Unix.Catalog.GetString("Load network parameters from saved file"), "gtk-properties");
 		w1.Add(this.LoadNetworkButton, null);
 		this.UIManager.InsertActionGroup(w1, 0);
 		this.AddAccelGroup(this.UIManager.AccelGroup);
@@ -216,7 +216,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 500;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 1;
+		this.MainNotebook.CurrentPage = 2;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
@@ -791,6 +791,7 @@ public partial class MainWindow
 		this.LoadNetworkToolbar = ((global::Gtk.Toolbar)(this.UIManager.GetWidget("/LoadNetworkToolbar")));
 		this.LoadNetworkToolbar.Name = "LoadNetworkToolbar";
 		this.LoadNetworkToolbar.ShowArrow = false;
+		this.LoadNetworkToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
 		this.LayoutPageNetwork.Add(this.LoadNetworkToolbar);
 		global::Gtk.Fixed.FixedChild w64 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageNetwork[this.LoadNetworkToolbar]));
 		w64.X = 30;
