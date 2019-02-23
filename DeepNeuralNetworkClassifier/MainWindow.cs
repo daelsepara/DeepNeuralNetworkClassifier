@@ -13,8 +13,7 @@ public partial class MainWindow : Gtk.Window
     Dialog Confirm;
 
     FileChooserDialog TextLoader, JsonLoader, JsonSaver, ImageSaver;
-    string TrainingSetFileName, TestDataFileName;
-    string NetworkFileName;
+    string TrainingDataFileName, TestDataFileName, NetworkFileName;
 
     List<Delimiter> Delimiters = new List<Delimiter>();
 
@@ -932,7 +931,7 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnOpenTrainingDataButtonClicked(object sender, EventArgs e)
     {
-        LoadTextFile(ref TrainingSetFileName, "Load Training Data", ViewTrainingData, FilenameTrainingData, true, Categories);
+        LoadTextFile(ref TrainingDataFileName, "Load Training Data", ViewTrainingData, FilenameTrainingData, true, Categories);
 
         UpdateParameters(ViewTrainingData, Examples, InputLayerNodes, true);
 
@@ -941,8 +940,8 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnReloadTrainingDataButtonClicked(object sender, EventArgs e)
     {
-        if (!string.IsNullOrEmpty(TrainingSetFileName))
-            ReloadTextFile(TrainingSetFileName, ViewTrainingData, true, Categories);
+        if (!string.IsNullOrEmpty(TrainingDataFileName))
+            ReloadTextFile(TrainingDataFileName, ViewTrainingData, true, Categories);
 
         UpdateParameters(ViewTrainingData, Examples, InputLayerNodes, true);
 
@@ -1050,8 +1049,8 @@ public partial class MainWindow : Gtk.Window
         L2.Text = "";
 
         NetworkSetuped = false;
-
         NetworkLoaded = false;
+        WeightsLoaded = false;
 
         TrainingDone = false;
 
