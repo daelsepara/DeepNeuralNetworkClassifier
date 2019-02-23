@@ -19,6 +19,10 @@ public partial class MainWindow
 
 	private global::Gtk.Action LoadNetworkButton;
 
+	private global::Gtk.Action PlotButton;
+
+	private global::Gtk.Action SavePlotButton;
+
 	private global::Gtk.Fixed MainLayout;
 
 	private global::Gtk.Notebook MainNotebook;
@@ -181,6 +185,8 @@ public partial class MainWindow
 
 	private global::Gtk.SpinButton Feature2;
 
+	private global::Gtk.Toolbar PlotToolbar;
+
 	private global::Gtk.Label LabelPagePlot;
 
 	private global::Gtk.Fixed LayoutPageAbout;
@@ -210,6 +216,10 @@ public partial class MainWindow
 		w1.Add(this.ClassifyButton, null);
 		this.LoadNetworkButton = new global::Gtk.Action("LoadNetworkButton", null, global::Mono.Unix.Catalog.GetString("Load parameters into network"), "gtk-properties");
 		w1.Add(this.LoadNetworkButton, null);
+		this.PlotButton = new global::Gtk.Action("PlotButton", null, global::Mono.Unix.Catalog.GetString("Plot"), "gtk-media-play");
+		w1.Add(this.PlotButton, null);
+		this.SavePlotButton = new global::Gtk.Action("SavePlotButton", null, global::Mono.Unix.Catalog.GetString("Save plot as image"), "gtk-save");
+		w1.Add(this.SavePlotButton, null);
 		this.UIManager.InsertActionGroup(w1, 0);
 		this.AddAccelGroup(this.UIManager.AccelGroup);
 		this.WidthRequest = 800;
@@ -231,7 +241,7 @@ public partial class MainWindow
 		this.MainNotebook.HeightRequest = 500;
 		this.MainNotebook.CanFocus = true;
 		this.MainNotebook.Name = "MainNotebook";
-		this.MainNotebook.CurrentPage = 3;
+		this.MainNotebook.CurrentPage = 0;
 		// Container child MainNotebook.Gtk.Notebook+NotebookChild
 		this.LayoutPageData = new global::Gtk.Fixed();
 		this.LayoutPageData.Name = "LayoutPageData";
@@ -946,7 +956,7 @@ public partial class MainWindow
 		w80.X = 600;
 		w80.Y = 90;
 		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
-		this.Feature1 = new global::Gtk.SpinButton(0D, 100D, 1D);
+		this.Feature1 = new global::Gtk.SpinButton(0D, 1000D, 1D);
 		this.Feature1.WidthRequest = 100;
 		this.Feature1.Name = "Feature1";
 		this.Feature1.Adjustment.PageIncrement = 1D;
@@ -957,19 +967,31 @@ public partial class MainWindow
 		w81.X = 460;
 		w81.Y = 110;
 		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
-		this.Feature2 = new global::Gtk.SpinButton(0D, 100D, 1D);
+		this.Feature2 = new global::Gtk.SpinButton(0D, 1000D, 1D);
 		this.Feature2.WidthRequest = 100;
 		this.Feature2.Name = "Feature2";
 		this.Feature2.Adjustment.PageIncrement = 1D;
 		this.Feature2.ClimbRate = 1D;
 		this.Feature2.Numeric = true;
+		this.Feature2.Value = 1D;
 		this.LayoutPagePlot.Add(this.Feature2);
 		global::Gtk.Fixed.FixedChild w82 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.Feature2]));
 		w82.X = 600;
 		w82.Y = 110;
+		// Container child LayoutPagePlot.Gtk.Fixed+FixedChild
+		this.UIManager.AddUiFromString("<ui><toolbar name=\'PlotToolbar\'><toolitem name=\'PlotButton\' action=\'PlotButton\'/>" +
+				"<toolitem name=\'SavePlotButton\' action=\'SavePlotButton\'/></toolbar></ui>");
+		this.PlotToolbar = ((global::Gtk.Toolbar)(this.UIManager.GetWidget("/PlotToolbar")));
+		this.PlotToolbar.Name = "PlotToolbar";
+		this.PlotToolbar.ShowArrow = false;
+		this.PlotToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
+		this.LayoutPagePlot.Add(this.PlotToolbar);
+		global::Gtk.Fixed.FixedChild w83 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPagePlot[this.PlotToolbar]));
+		w83.X = 460;
+		w83.Y = 160;
 		this.MainNotebook.Add(this.LayoutPagePlot);
-		global::Gtk.Notebook.NotebookChild w83 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPagePlot]));
-		w83.Position = 3;
+		global::Gtk.Notebook.NotebookChild w84 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPagePlot]));
+		w84.Position = 3;
 		// Notebook tab
 		this.LabelPagePlot = new global::Gtk.Label();
 		this.LabelPagePlot.Name = "LabelPagePlot";
@@ -981,8 +1003,8 @@ public partial class MainWindow
 		this.LayoutPageAbout.Name = "LayoutPageAbout";
 		this.LayoutPageAbout.HasWindow = false;
 		this.MainNotebook.Add(this.LayoutPageAbout);
-		global::Gtk.Notebook.NotebookChild w84 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
-		w84.Position = 4;
+		global::Gtk.Notebook.NotebookChild w85 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
+		w85.Position = 4;
 		// Notebook tab
 		this.LabelPageAbout = new global::Gtk.Label();
 		this.LabelPageAbout.Name = "LabelPageAbout";
@@ -990,9 +1012,9 @@ public partial class MainWindow
 		this.MainNotebook.SetTabLabel(this.LayoutPageAbout, this.LabelPageAbout);
 		this.LabelPageAbout.ShowAll();
 		this.MainLayout.Add(this.MainNotebook);
-		global::Gtk.Fixed.FixedChild w85 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
-		w85.X = 30;
-		w85.Y = 70;
+		global::Gtk.Fixed.FixedChild w86 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
+		w86.X = 30;
+		w86.Y = 70;
 		// Container child MainLayout.Gtk.Fixed+FixedChild
 		this.UIManager.AddUiFromString("<ui><toolbar name=\'MainToolbar\'><toolitem name=\'AboutButton\' action=\'AboutButton\'" +
 				"/><toolitem name=\'QuitButton\' action=\'QuitButton\'/></toolbar></ui>");
@@ -1001,9 +1023,9 @@ public partial class MainWindow
 		this.MainToolbar.ShowArrow = false;
 		this.MainToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
 		this.MainLayout.Add(this.MainToolbar);
-		global::Gtk.Fixed.FixedChild w86 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainToolbar]));
-		w86.X = 30;
-		w86.Y = 20;
+		global::Gtk.Fixed.FixedChild w87 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainToolbar]));
+		w87.X = 30;
+		w87.Y = 20;
 		this.Add(this.MainLayout);
 		if ((this.Child != null))
 		{
@@ -1018,6 +1040,8 @@ public partial class MainWindow
 		this.ResetButton.Activated += new global::System.EventHandler(this.OnResetButtonClicked);
 		this.ClassifyButton.Activated += new global::System.EventHandler(this.OnClassifyButtonClicked);
 		this.LoadNetworkButton.Activated += new global::System.EventHandler(this.OnLoadNetworkButtonClicked);
+		this.PlotButton.Activated += new global::System.EventHandler(this.OnPlotButtonClicked);
+		this.SavePlotButton.Activated += new global::System.EventHandler(this.OnSavePlotButtonClicked);
 		this.MainNotebook.SwitchPage += new global::Gtk.SwitchPageHandler(this.OnMainNotebookSwitchPage);
 		this.OpenTrainingDataButton.Clicked += new global::System.EventHandler(this.OnOpenTrainingDataButtonClicked);
 		this.ReloadTrainingDataButton.Clicked += new global::System.EventHandler(this.OnReloadTrainingDataButtonClicked);

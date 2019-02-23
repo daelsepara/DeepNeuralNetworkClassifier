@@ -58,6 +58,20 @@
         <property name="Tooltip" translatable="yes">Load parameters into network</property>
         <signal name="Activated" handler="OnLoadNetworkButtonClicked" />
       </action>
+      <action id="PlotButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-media-play</property>
+        <property name="Tooltip" translatable="yes">Plot</property>
+        <signal name="Activated" handler="OnPlotButtonClicked" />
+      </action>
+      <action id="SavePlotButton">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-save</property>
+        <property name="Tooltip" translatable="yes">Save plot as image</property>
+        <signal name="Activated" handler="OnSavePlotButtonClicked" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="WidthRequest">800</property>
@@ -79,7 +93,7 @@
             <property name="WidthRequest">740</property>
             <property name="HeightRequest">500</property>
             <property name="CanFocus">True</property>
-            <property name="CurrentPage">3</property>
+            <property name="CurrentPage">0</property>
             <signal name="SwitchPage" handler="OnMainNotebookSwitchPage" />
             <child>
               <widget class="Gtk.Fixed" id="LayoutPageData">
@@ -1007,7 +1021,7 @@
                   <widget class="Gtk.SpinButton" id="Feature1">
                     <property name="MemberName" />
                     <property name="WidthRequest">100</property>
-                    <property name="Upper">100</property>
+                    <property name="Upper">1000</property>
                     <property name="PageIncrement">1</property>
                     <property name="StepIncrement">1</property>
                     <property name="ClimbRate">1</property>
@@ -1022,15 +1036,31 @@
                   <widget class="Gtk.SpinButton" id="Feature2">
                     <property name="MemberName" />
                     <property name="WidthRequest">100</property>
-                    <property name="Upper">100</property>
+                    <property name="Upper">1000</property>
                     <property name="PageIncrement">1</property>
                     <property name="StepIncrement">1</property>
                     <property name="ClimbRate">1</property>
                     <property name="Numeric">True</property>
+                    <property name="Value">1</property>
                   </widget>
                   <packing>
                     <property name="X">600</property>
                     <property name="Y">110</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Toolbar" id="PlotToolbar">
+                    <property name="MemberName" />
+                    <property name="ShowArrow">False</property>
+                    <property name="ButtonStyle">Icons</property>
+                    <node name="PlotToolbar" type="Toolbar">
+                      <node type="Toolitem" action="PlotButton" />
+                      <node type="Toolitem" action="SavePlotButton" />
+                    </node>
+                  </widget>
+                  <packing>
+                    <property name="X">460</property>
+                    <property name="Y">160</property>
                   </packing>
                 </child>
               </widget>
