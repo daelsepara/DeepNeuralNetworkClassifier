@@ -191,6 +191,20 @@ public partial class MainWindow
 
 	private global::Gtk.Fixed LayoutPageAbout;
 
+	private global::Gtk.Image DeepNeuralNetwork;
+
+	private global::Gtk.Label LabelAbout;
+
+	private global::Gtk.ScrolledWindow WindowAbout;
+
+	private global::Gtk.TextView ViewAbout;
+
+	private global::Gtk.Label LabelCredits;
+
+	private global::Gtk.ScrolledWindow WindowCredits;
+
+	private global::Gtk.TextView ViewCredits;
+
 	private global::Gtk.Label LabelPageAbout;
 
 	private global::Gtk.Toolbar MainToolbar;
@@ -1002,9 +1016,87 @@ public partial class MainWindow
 		this.LayoutPageAbout = new global::Gtk.Fixed();
 		this.LayoutPageAbout.Name = "LayoutPageAbout";
 		this.LayoutPageAbout.HasWindow = false;
+		// Container child LayoutPageAbout.Gtk.Fixed+FixedChild
+		this.DeepNeuralNetwork = new global::Gtk.Image();
+		this.DeepNeuralNetwork.WidthRequest = 500;
+		this.DeepNeuralNetwork.Name = "DeepNeuralNetwork";
+		this.DeepNeuralNetwork.Pixbuf = global::Gdk.Pixbuf.LoadFromResource("DeepNeuralNetworkClassifier.DeepNeuralNetworkScaled.png");
+		this.LayoutPageAbout.Add(this.DeepNeuralNetwork);
+		global::Gtk.Fixed.FixedChild w85 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.DeepNeuralNetwork]));
+		w85.Y = 30;
+		// Container child LayoutPageAbout.Gtk.Fixed+FixedChild
+		this.LabelAbout = new global::Gtk.Label();
+		this.LabelAbout.Name = "LabelAbout";
+		this.LabelAbout.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Deep Neural Network Classifier</b>");
+		this.LabelAbout.UseMarkup = true;
+		this.LayoutPageAbout.Add(this.LabelAbout);
+		global::Gtk.Fixed.FixedChild w86 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.LabelAbout]));
+		w86.X = 500;
+		w86.Y = 30;
+		// Container child LayoutPageAbout.Gtk.Fixed+FixedChild
+		this.WindowAbout = new global::Gtk.ScrolledWindow();
+		this.WindowAbout.WidthRequest = 220;
+		this.WindowAbout.HeightRequest = 200;
+		this.WindowAbout.Name = "WindowAbout";
+		this.WindowAbout.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child WindowAbout.Gtk.Container+ContainerChild
+		this.ViewAbout = new global::Gtk.TextView();
+		this.ViewAbout.Buffer.Text = global::Mono.Unix.Catalog.GetString(@"Deep Neural Network Classifier (DeepNNC) software utilizes a multilayer artificial neural network (ANN) architecture composed of the input layer, one or several hidden layer(s), and the output layer. It can be used to classify a wide variety of data sets.
+
+Three sets of weights are ""trained"":  1) connection strengths between the input and the first hidden layer nodes, 2) connection strengths between the nodes of intermediate hidden layers, and the 3) connection strengths  between the last hidden layer and output layer. The bias nodes have a fixed value of 1.0.
+
+DeepNNC can perform multi-category classification. Some data sets are included in the DeepNNC bundle for testing purposes.
+
+More data sets are available at:
+
+P. Fränti and S. Sieranoja
+Applied Intelligence, 1-17, 2018
+https://doi.org/10.1007/s10489-018-1238-7
+
+http://cs.joensuu.fi/sipu/datasets/");
+		this.ViewAbout.Name = "ViewAbout";
+		this.ViewAbout.Editable = false;
+		this.ViewAbout.AcceptsTab = false;
+		this.ViewAbout.WrapMode = ((global::Gtk.WrapMode)(2));
+		this.WindowAbout.Add(this.ViewAbout);
+		this.LayoutPageAbout.Add(this.WindowAbout);
+		global::Gtk.Fixed.FixedChild w88 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.WindowAbout]));
+		w88.X = 501;
+		w88.Y = 55;
+		// Container child LayoutPageAbout.Gtk.Fixed+FixedChild
+		this.LabelCredits = new global::Gtk.Label();
+		this.LabelCredits.Name = "LabelCredits";
+		this.LabelCredits.LabelProp = global::Mono.Unix.Catalog.GetString("<b>Credits</b>");
+		this.LabelCredits.UseMarkup = true;
+		this.LayoutPageAbout.Add(this.LabelCredits);
+		global::Gtk.Fixed.FixedChild w89 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.LabelCredits]));
+		w89.X = 500;
+		w89.Y = 270;
+		// Container child LayoutPageAbout.Gtk.Fixed+FixedChild
+		this.WindowCredits = new global::Gtk.ScrolledWindow();
+		this.WindowCredits.WidthRequest = 220;
+		this.WindowCredits.HeightRequest = 140;
+		this.WindowCredits.Name = "WindowCredits";
+		this.WindowCredits.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child WindowCredits.Gtk.Container+ContainerChild
+		this.ViewCredits = new global::Gtk.TextView();
+		this.ViewCredits.Buffer.Text = global::Mono.Unix.Catalog.GetString(@"Icons made by Freepik from www.flaticon.com is licensed by Creative Commons BY 3.0
+
+Original fmincg (Optimizer) implementation by (C) Copyright 1999, 2000 & 2001, Carl Edward Rasmussen
+
+C# implementation by Peter Sergio Larsen with minor modifications by Stephen Daedalus Separa (2018) ");
+		this.ViewCredits.Name = "ViewCredits";
+		this.ViewCredits.Editable = false;
+		this.ViewCredits.AcceptsTab = false;
+		this.ViewCredits.WrapMode = ((global::Gtk.WrapMode)(2));
+		this.WindowCredits.Add(this.ViewCredits);
+		this.LayoutPageAbout.Add(this.WindowCredits);
+		global::Gtk.Fixed.FixedChild w91 = ((global::Gtk.Fixed.FixedChild)(this.LayoutPageAbout[this.WindowCredits]));
+		w91.X = 501;
+		w91.Y = 295;
 		this.MainNotebook.Add(this.LayoutPageAbout);
-		global::Gtk.Notebook.NotebookChild w85 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
-		w85.Position = 4;
+		global::Gtk.Notebook.NotebookChild w92 = ((global::Gtk.Notebook.NotebookChild)(this.MainNotebook[this.LayoutPageAbout]));
+		w92.Position = 4;
 		// Notebook tab
 		this.LabelPageAbout = new global::Gtk.Label();
 		this.LabelPageAbout.Name = "LabelPageAbout";
@@ -1012,9 +1104,9 @@ public partial class MainWindow
 		this.MainNotebook.SetTabLabel(this.LayoutPageAbout, this.LabelPageAbout);
 		this.LabelPageAbout.ShowAll();
 		this.MainLayout.Add(this.MainNotebook);
-		global::Gtk.Fixed.FixedChild w86 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
-		w86.X = 30;
-		w86.Y = 70;
+		global::Gtk.Fixed.FixedChild w93 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainNotebook]));
+		w93.X = 30;
+		w93.Y = 70;
 		// Container child MainLayout.Gtk.Fixed+FixedChild
 		this.UIManager.AddUiFromString("<ui><toolbar name=\'MainToolbar\'><toolitem name=\'AboutButton\' action=\'AboutButton\'" +
 				"/><toolitem name=\'QuitButton\' action=\'QuitButton\'/></toolbar></ui>");
@@ -1023,9 +1115,9 @@ public partial class MainWindow
 		this.MainToolbar.ShowArrow = false;
 		this.MainToolbar.ToolbarStyle = ((global::Gtk.ToolbarStyle)(0));
 		this.MainLayout.Add(this.MainToolbar);
-		global::Gtk.Fixed.FixedChild w87 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainToolbar]));
-		w87.X = 30;
-		w87.Y = 20;
+		global::Gtk.Fixed.FixedChild w94 = ((global::Gtk.Fixed.FixedChild)(this.MainLayout[this.MainToolbar]));
+		w94.X = 30;
+		w94.Y = 20;
 		this.Add(this.MainLayout);
 		if ((this.Child != null))
 		{

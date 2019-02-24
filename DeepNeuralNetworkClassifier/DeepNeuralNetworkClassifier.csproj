@@ -60,6 +60,7 @@
       <LogicalName>gui.stetic</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Resources\layers.png" />
+    <EmbeddedResource Include="..\Resources\DeepNeuralNetworkScaled.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />

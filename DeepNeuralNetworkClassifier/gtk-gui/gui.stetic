@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <stetic-interface>
   <configuration>
     <images-root-path>..</images-root-path>
@@ -1081,6 +1081,98 @@
               <widget class="Gtk.Fixed" id="LayoutPageAbout">
                 <property name="MemberName" />
                 <property name="HasWindow">False</property>
+                <child>
+                  <widget class="Gtk.Image" id="DeepNeuralNetwork">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">500</property>
+                    <property name="Pixbuf">resource:DeepNeuralNetworkClassifier.DeepNeuralNetworkScaled.png</property>
+                  </widget>
+                  <packing>
+                    <property name="Y">30</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelAbout">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Deep Neural Network Classifier&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">500</property>
+                    <property name="Y">30</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="WindowAbout">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">220</property>
+                    <property name="HeightRequest">200</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="ViewAbout">
+                        <property name="MemberName" />
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="AcceptsTab">False</property>
+                        <property name="Text" translatable="yes">Deep Neural Network Classifier (DeepNNC) software utilizes a multilayer artificial neural network (ANN) architecture composed of the input layer, one or several hidden layer(s), and the output layer. It can be used to classify a wide variety of data sets.
+
+Three sets of weights are "trained":  1) connection strengths between the input and the first hidden layer nodes, 2) connection strengths between the nodes of intermediate hidden layers, and the 3) connection strengths  between the last hidden layer and output layer. The bias nodes have a fixed value of 1.0.
+
+DeepNNC can perform multi-category classification. Some data sets are included in the DeepNNC bundle for testing purposes.
+
+More data sets are available at:
+
+P. Fränti and S. Sieranoja
+Applied Intelligence, 1-17, 2018
+https://doi.org/10.1007/s10489-018-1238-7
+
+http://cs.joensuu.fi/sipu/datasets/</property>
+                        <property name="WrapMode">Word</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">501</property>
+                    <property name="Y">55</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="LabelCredits">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">&lt;b&gt;Credits&lt;/b&gt;</property>
+                    <property name="UseMarkup">True</property>
+                  </widget>
+                  <packing>
+                    <property name="X">500</property>
+                    <property name="Y">270</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="WindowCredits">
+                    <property name="MemberName" />
+                    <property name="WidthRequest">220</property>
+                    <property name="HeightRequest">140</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TextView" id="ViewCredits">
+                        <property name="MemberName" />
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Editable">False</property>
+                        <property name="AcceptsTab">False</property>
+                        <property name="Text" translatable="yes">Icons made by Freepik from www.flaticon.com is licensed by Creative Commons BY 3.0
+
+Original fmincg (Optimizer) implementation by (C) Copyright 1999, 2000 &amp; 2001, Carl Edward Rasmussen
+
+C# implementation by Peter Sergio Larsen with minor modifications by Stephen Daedalus Separa (2018) </property>
+                        <property name="WrapMode">Word</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="X">501</property>
+                    <property name="Y">295</property>
+                  </packing>
+                </child>
               </widget>
               <packing>
                 <property name="Position">4</property>
