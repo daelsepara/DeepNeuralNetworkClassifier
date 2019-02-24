@@ -8,6 +8,7 @@
     <RootNamespace>DeepNeuralNetworkClassifier</RootNamespace>
     <AssemblyName>DeepNeuralNetworkClassifier</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <ApplicationIcon>..\Resources\DeepNeuralNetworkClassifier.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
