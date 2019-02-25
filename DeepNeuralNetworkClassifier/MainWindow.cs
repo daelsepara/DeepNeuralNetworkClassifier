@@ -942,6 +942,13 @@ public partial class MainWindow : Gtk.Window
 
         if (WeightsLoaded)
         {
+            var training = ViewTrainingData.Buffer.Text.Trim();
+
+            if (!string.IsNullOrEmpty(training))
+            {
+                SetupInputData(training);
+            }
+
             Options.Alpha = Convert.ToDouble(LearningRate.Value, ci) / 100;
             Options.Epochs = Convert.ToInt32(Epochs.Value, ci);
             Options.Inputs = Convert.ToInt32(InputLayerNodes.Value, ci);
@@ -950,6 +957,10 @@ public partial class MainWindow : Gtk.Window
             Options.Nodes = Convert.ToInt32(HiddenLayerNodes.Value, ci);
             Options.HiddenLayers = Convert.ToInt32(HiddenLayers.Value, ci);
             Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
+            Network.UseL2 = UseL2.Active;
+
+            ProgressBar.Fraction = 1.0;
+            ProgressBar.Text = "Network Loaded";
 
             NetworkLoaded = WeightsLoaded;
 
@@ -963,16 +974,13 @@ public partial class MainWindow : Gtk.Window
             }
 
             NetworkSetuped = true;
-            TrainingDone = true;
 
             CurrentEpoch = 0;
 
             Iterations.Text = "";
             ErrorCost.Text = "";
             L2.Text = "";
-            ProgressBar.Text = "";
 
-            TrainingDone = false;
             UseOptimizer.Sensitive = true;
             UseL2.Sensitive = true;
             Epochs.Sensitive = true;
@@ -1320,6 +1328,8 @@ public partial class MainWindow : Gtk.Window
 
     protected void OnUseL2Toggled(object sender, EventArgs e)
     {
+        Network.UseL2 = UseL2.Active;
+        
         if (UseL2.Active)
         {
             UseOptimizer.Active = false;
