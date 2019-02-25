@@ -984,6 +984,7 @@ public partial class MainWindow : Gtk.Window
             UseOptimizer.Sensitive = true;
             UseL2.Sensitive = true;
             Epochs.Sensitive = true;
+            WeightsLoaded = false;
         }
     }
 
