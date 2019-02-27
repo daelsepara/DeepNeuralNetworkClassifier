@@ -94,7 +94,7 @@ namespace DeepLearnCS
             for (var layer = 0; layer < model.Weights.Count; layer++)
             {
                 network.Weights[layer] = Set(model.Weights[layer]);
-                network.Layers[layer] = new HiddenLayer(network.Weights[layer].x - 1, network.Weights[layer].y);
+                network.Layers.Add(new HiddenLayer(network.Weights[layer].x - 1, network.Weights[layer].y));
             }
 
             if (model.Normalization != null)
