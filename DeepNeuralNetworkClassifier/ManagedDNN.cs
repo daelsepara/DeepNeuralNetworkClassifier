@@ -546,6 +546,9 @@ namespace DeepLearnCS
                     ManagedOps.Free(Weights[layer]);
                 }
             }
+
+            if (Layers != null && Layers.Count > 0)
+                Layers.Clear();
         }
     }
 }
