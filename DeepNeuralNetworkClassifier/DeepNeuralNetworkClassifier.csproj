@@ -84,6 +84,7 @@
     <Compile Include="Conrec.cs" />
     <Compile Include="Delimiter.cs" />
     <Compile Include="SafeConvert.cs" />
+    <Compile Include="HiddenLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

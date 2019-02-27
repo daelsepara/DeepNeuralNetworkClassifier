@@ -5,6 +5,8 @@ namespace DeepLearnCS
 {
     public class ManagedDNN
     {
+        public List<HiddenLayer> Layers = new List<HiddenLayer>();
+
         public ManagedArray[] Weights;
         public ManagedArray[] Deltas;
 
@@ -22,8 +24,6 @@ namespace DeepLearnCS
         // Error
         public double Cost;
         public double L2;
-
-        public bool UseL2;
 
         public int Iterations;
 
@@ -271,6 +271,30 @@ namespace DeepLearnCS
             Y_true = Labels(output, opts);
         }
 
+        public void SetupHiddenLayers(int inputs, int categories, List<int> LayerNodes)
+        {
+            if (LayerNodes.Count > 0)
+            {
+                if (Layers != null && Layers.Count > 0)
+                {
+                    Layers.Clear();
+                }
+                else
+                {
+                    Layers = new List<HiddenLayer>();
+                }
+
+                Layers.Add(new HiddenLayer(inputs, LayerNodes[0]));
+
+                for (var layer = 1; layer < LayerNodes.Count; layer++)
+                {
+                    Layers.Add(new HiddenLayer(LayerNodes[layer - 1], LayerNodes[layer]));
+                }
+
+                Layers.Add(new HiddenLayer(LayerNodes[LayerNodes.Count - 1], categories));
+            }
+        }
+
         public void Setup(ManagedArray output, NeuralNetworkOptions opts, bool Reset = true)
         {
             if (Reset)
@@ -323,16 +347,28 @@ namespace DeepLearnCS
                     }
                 }
 
-                Weights = new ManagedArray[opts.HiddenLayers + 1];
-
-                Weights[0] = new ManagedArray(opts.Inputs + 1, opts.Nodes);
-
-                for (var layer = 1; layer < opts.HiddenLayers; layer++)
+                if (Layers.Count > 0)
                 {
-                    Weights[layer] = (new ManagedArray(opts.Nodes + 1, opts.Nodes));
+                    Weights = new ManagedArray[Layers.Count];
+ 
+                    for (var layer = 0; layer < Layers.Count; layer++)
+                    {
+                        Weights[layer] = new ManagedArray(Layers[layer].Inputs + 1, Layers[layer].Outputs);
+                    }
                 }
+                else
+                {
+                    Weights = new ManagedArray[opts.HiddenLayers + 1];
 
-                Weights[opts.HiddenLayers] = (new ManagedArray(opts.Nodes + 1, opts.Categories));
+                    Weights[0] = new ManagedArray(opts.Inputs + 1, opts.Nodes);
+
+                    for (var layer = 1; layer < opts.HiddenLayers; layer++)
+                    {
+                        Weights[layer] = (new ManagedArray(opts.Nodes + 1, opts.Nodes));
+                    }
+
+                    Weights[opts.HiddenLayers] = (new ManagedArray(opts.Nodes + 1, opts.Categories));
+                }
             }
 
             Activations = new ManagedArray[opts.HiddenLayers];
@@ -364,7 +400,7 @@ namespace DeepLearnCS
             Forward(input);
             BackPropagation(input);
 
-            var optimized = (double.IsNaN(UseL2 ? L2 : Cost) || (UseL2 ? L2 : Cost) < opts.Tolerance);
+            var optimized = (double.IsNaN(opts.UseL2 ? L2 : Cost) || (opts.UseL2 ? L2 : Cost) < opts.Tolerance);
 
             // Apply gradients only if the error is still high
             if (!optimized)

@@ -87,12 +87,14 @@ namespace DeepLearnCS
 
             var network = new ManagedDNN
             {
-                Weights = new ManagedArray[model.Weights.Count]
+                Weights = new ManagedArray[model.Weights.Count],
+                Layers = new List<HiddenLayer>()
             };
 
             for (var layer = 0; layer < model.Weights.Count; layer++)
             {
                 network.Weights[layer] = Set(model.Weights[layer]);
+                network.Layers[layer] = new HiddenLayer(network.Weights[layer].x - 1, network.Weights[layer].y);
             }
 
             if (model.Normalization != null)
