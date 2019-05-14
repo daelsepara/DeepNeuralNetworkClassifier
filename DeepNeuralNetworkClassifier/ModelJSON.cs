@@ -7,7 +7,7 @@ namespace DeepLearnCS
     public class ManagedDNNJSON
     {
         public List<double[,]> Weights = new List<double[,]>();
-        public double[,] Normalization;
+        public List<double[]> Normalization = new List<double[]>();
     }
 
     public static class Utility
@@ -46,19 +46,8 @@ namespace DeepLearnCS
                 model.Weights.Add(Convert2D(network.Weights[layer]));
             }
 
-            return model;
-        }
-
-        public static ManagedDNNJSON Convert(ManagedDNN network, ManagedArray normalization)
-        {
-            var model = new ManagedDNNJSON();
-
-            for (var layer = 0; layer < network.Weights.GetLength(0); layer++)
-            {
-                model.Weights.Add(Convert2D(network.Weights[layer]));
-            }
-
-            model.Normalization = Convert2D(normalization);
+            model.Normalization.Add(network.Min);
+            model.Normalization.Add(network.Max);
 
             return model;
         }
@@ -72,20 +61,11 @@ namespace DeepLearnCS
             return output;
         }
 
-        public static string Serialize(ManagedDNN network, ManagedArray normalization)
-        {
-            var model = Convert(network, normalization);
-
-            var output = JsonConvert.SerializeObject(model);
-
-            return output;
-        }
-
-        public static ManagedDNN DeserializeDNN(string json, ManagedArray normalization)
+        public static ManagedDNN DeserializeDNN(string json)
         {
             var model = JsonConvert.DeserializeObject<ManagedDNNJSON>(json);
 
-            var network = new ManagedDNN
+            var network = new ManagedDNN()
             {
                 Weights = new ManagedArray[model.Weights.Count],
                 Layers = new List<HiddenLayer>()
@@ -97,22 +77,10 @@ namespace DeepLearnCS
                 network.Layers.Add(new HiddenLayer(network.Weights[layer].x - 1, network.Weights[layer].y));
             }
 
-            if (model.Normalization != null)
+            if (model.Normalization != null && model.Normalization.Count > 1)
             {
-                var temp = Set(model.Normalization);
-
-                if (normalization == null)
-                {
-                    normalization = new ManagedArray(temp);
-                }
-                else
-                {
-                    normalization.Resize(temp);
-                }
-
-                ManagedOps.Copy2D(normalization, temp, 0, 0);
-
-                ManagedOps.Free(temp);
+                network.Min = model.Normalization[0];
+                network.Max = model.Normalization[1];
             }
 
             return network;
@@ -160,7 +128,27 @@ namespace DeepLearnCS
         {
             var json = ReadString(BaseDirectory, Filename);
 
-            return !string.IsNullOrEmpty(json) ? DeserializeDNN(json, normalization) : null;
+            var network = !string.IsNullOrEmpty(json) ? DeserializeDNN(json) : null;
+
+            if (network.Min.GetLength(0) > 0 && network.Max.GetLength(0) > 0)
+            {
+                if (normalization == null)
+                {
+                    normalization = new ManagedArray(network.Min.GetLength(0), 2);
+                }
+                else
+                {
+                    normalization.Resize(network.Min.GetLength(0), 2);
+                }
+
+                for (var x = 0; x < 2; x++)
+                {
+                    normalization[x, 0] = network.Min[x];
+                    normalization[x, 1] = network.Max[x];
+                }
+            }
+
+            return network;
         }
 
         public static string LoadJson(string BaseDirectory, string FileName)

@@ -924,6 +924,18 @@ public partial class MainWindow : Gtk.Window
         Options.Tolerance = Convert.ToDouble(Tolerance.Value, ci) / 100000;
         Options.UseL2 = UseL2.Active;
 
+        if (NormalizationData != null && NormalizationData.y > 1)
+        {
+            Network.Min = new double[NormalizationData.x];
+            Network.Max = new double[NormalizationData.x];
+
+            for (var i = 0; i < 2; i++)
+            {
+                Network.Min[i] = NormalizationData[i, 0];
+                Network.Max[i] = NormalizationData[i, 1];
+            }
+        }
+
         if (UseOptimizer.Active)
         {
             Network.SetupOptimizer(InputData, OutputData, Options, true);
@@ -1278,39 +1290,42 @@ public partial class MainWindow : Gtk.Window
 
         LoadJson(ref NetworkFileName, "Load network model", FilenameNetwork);
 
-        Network.Free();
-
-        Network = Utility.LoadDNN(GetDirectory(NetworkFileName), GetBaseFileName(NetworkFileName), NormalizationData);
-
-        if (Network != null)
+        if (!string.IsNullOrEmpty(NetworkFileName) && File.Exists(NetworkFileName))
         {
-            if (Network.Weights != null && Network.Weights.GetLength(0) > 1)
+            Network.Free();
+
+            Network = Utility.LoadDNN(GetDirectory(NetworkFileName), GetBaseFileName(NetworkFileName), NormalizationData);
+
+            if (Network != null)
             {
-                if (Network.Weights[0].x > 0)
-                    InputLayerNodes.Value = Network.Weights[0].x - 1;
+                if (Network.Weights != null && Network.Weights.GetLength(0) > 1)
+                {
+                    if (Network.Weights[0].x > 0)
+                        InputLayerNodes.Value = Network.Weights[0].x - 1;
 
-                if (Network.Weights[0].y > 0)
-                    HiddenLayerNodes.Value = Network.Weights[0].y;
+                    if (Network.Weights[0].y > 0)
+                        HiddenLayerNodes.Value = Network.Weights[0].y;
 
-                HiddenLayers.Value = Network.Weights.GetLength(0) - 1;
+                    HiddenLayers.Value = Network.Weights.GetLength(0) - 1;
 
-                if (Network.Weights[Network.Weights.GetLength(0) - 1].y > 0)
-                    Categories.Value = Network.Weights[Network.Weights.GetLength(0) - 1].y;
+                    if (Network.Weights[Network.Weights.GetLength(0) - 1].y > 0)
+                        Categories.Value = Network.Weights[Network.Weights.GetLength(0) - 1].y;
 
-                UpdateHiddenLayerWeightsSelector(HiddenLayerWeightSelector, Network.Weights);
-                UpdateHiddenLayerWeights(Network.Weights);
-                UpdateOutputLayerWeights(Network.Weights);
+                    UpdateHiddenLayerWeightsSelector(HiddenLayerWeightSelector, Network.Weights);
+                    UpdateHiddenLayerWeights(Network.Weights);
+                    UpdateOutputLayerWeights(Network.Weights);
 
-                if (NormalizationData != null)
-                    UpdateTextView(ViewNormalization, NormalizationData);
+                    if (NormalizationData != null)
+                        UpdateTextView(ViewNormalization, NormalizationData);
 
-                WeightsLoaded = true;
-                TrainingDone = true;
+                    WeightsLoaded = true;
+                    TrainingDone = true;
+                }
             }
-        }
-        else
-        {
-            Network = new ManagedDNN();
+            else
+            {
+                Network = new ManagedDNN();
+            }
         }
     }
 
@@ -1321,7 +1336,7 @@ public partial class MainWindow : Gtk.Window
 
         if (NetworkSetuped)
         {
-            var json = Utility.Serialize(Network, NormalizationData);
+            var json = Utility.Serialize(Network);
 
             SaveJson(ref NetworkFileName, "Save network model", FilenameNetwork, json);
         }
