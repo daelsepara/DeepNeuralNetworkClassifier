@@ -99,7 +99,7 @@ namespace DeepLearnCS
             }
         }
 
-        static string ReadString(string BaseDirectory, string Filename)
+        static string LoadJSON(string BaseDirectory, string Filename)
         {
             var json = "";
 
@@ -126,7 +126,7 @@ namespace DeepLearnCS
 
         public static ManagedDNN LoadDNN(string BaseDirectory, string Filename, ManagedArray normalization)
         {
-            var json = ReadString(BaseDirectory, Filename);
+            var json = LoadJSON(BaseDirectory, Filename);
 
             var network = !string.IsNullOrEmpty(json) ? DeserializeDNN(json) : null;
 
@@ -149,11 +149,6 @@ namespace DeepLearnCS
             }
 
             return network;
-        }
-
-        public static string LoadJson(string BaseDirectory, string FileName)
-        {
-            return ReadString(BaseDirectory, FileName);
         }
     }
 }

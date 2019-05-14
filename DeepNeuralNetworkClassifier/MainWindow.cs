@@ -378,18 +378,15 @@ public partial class MainWindow : Gtk.Window
 
                 var ext = JsonSaver.Filter.Name;
 
-                FileName = String.Format("{0}.{1}", GetBaseFileName(FileName), ext);
-
                 if (!string.IsNullOrEmpty(data))
                 {
-                    var fullpath = String.Format("{0}/{1}", directory, FileName);
-
                     try
                     {
-                        using (var file = new StreamWriter(fullpath, false))
-                        {
-                            file.Write(data);
-                        }
+                        Utility.Save(directory, GetBaseFileName(FileName), data);
+
+                        FileName = String.Format("{0}.{1}", GetBaseFileName(FileName), ext);
+
+                        var fullpath = String.Format("{0}/{1}", directory, FileName);
 
                         FileName = fullpath;
 
@@ -1345,7 +1342,7 @@ public partial class MainWindow : Gtk.Window
     protected void OnUseL2Toggled(object sender, EventArgs e)
     {
         Options.UseL2 = UseL2.Active;
-        
+
         if (UseL2.Active)
         {
             UseOptimizer.Active = false;
