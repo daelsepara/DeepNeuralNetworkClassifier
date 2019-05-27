@@ -68,6 +68,11 @@ namespace DeepLearnCS
             var network = new ManagedDNN()
             {
                 Weights = new ManagedArray[model.Weights.Count],
+                X = new ManagedArray[model.Weights.Count],
+                Z = new ManagedArray[model.Weights.Count],
+                D = new ManagedArray[model.Weights.Count],
+                Deltas = new ManagedArray[model.Weights.Count],
+                Activations = new ManagedArray[model.Weights.Count - 1],
                 Layers = new List<HiddenLayer>()
             };
 

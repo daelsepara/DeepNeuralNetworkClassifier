@@ -21,8 +21,8 @@ namespace DeepLearnCS
         public ManagedArray[] Z;
 
         // internal use
-        private ManagedArray[] Activations;
-        private ManagedArray[] D;
+        public ManagedArray[] Activations;
+        public ManagedArray[] D;
 
         // Error
         public double Cost;
