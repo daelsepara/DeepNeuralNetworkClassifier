@@ -365,12 +365,18 @@ namespace DeepLearnCS
 
                     Weights[0] = new ManagedArray(opts.Inputs + 1, opts.Nodes);
 
+                    Layers.Add(new HiddenLayer(opts.Inputs, opts.Nodes));
+
                     for (var layer = 1; layer < opts.HiddenLayers; layer++)
                     {
                         Weights[layer] = (new ManagedArray(opts.Nodes + 1, opts.Nodes));
+
+                        Layers.Add(new HiddenLayer(opts.Nodes, opts.Nodes));
                     }
 
                     Weights[opts.HiddenLayers] = (new ManagedArray(opts.Nodes + 1, opts.Categories));
+
+                    Layers.Add(new HiddenLayer(opts.Nodes, opts.Categories));
                 }
             }
 
